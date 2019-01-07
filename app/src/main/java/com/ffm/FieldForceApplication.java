@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
 
+import com.ffm.db.room.AppDatabase;
+import com.ffm.db.room.handlers.DataHandler;
 import com.ffm.preference.AppPreference;
 import com.ffm.util.SnackbarHelper;
 import com.ffm.util.Trace;
@@ -30,8 +32,8 @@ public class FieldForceApplication extends MultiDexApplication {
         super.onCreate();
         application = this;
         AppPreference.init(application);
-        //AppDatabase.getDatabase(getApplicationContext());
-        //DataHandler.init();
+        AppDatabase.getDatabase(getApplicationContext());
+        DataHandler.init();
     }
 
     public static synchronized FieldForceApplication getInstance() {

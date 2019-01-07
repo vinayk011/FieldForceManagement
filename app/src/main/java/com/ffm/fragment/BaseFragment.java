@@ -1,38 +1,46 @@
-package com.ffm.activity;
+package com.ffm.fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-
-import com.ffm.FieldForceApplication;
+import com.ffm.activity.HomeActivity;
 import com.ffm.dialog.LoadingDialog;
 import com.ffm.permission.Permission;
 import com.ffm.permission.PermissionCallback;
 import com.ffm.permission.PermissionUtils;
+import com.ffm.util.SnackbarHelper;
 import com.ffm.util.Trace;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Set;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.databinding.ViewDataBinding;
+import androidx.fragment.app.Fragment;
 
-public class BaseActivity<T extends ViewDataBinding> extends AppCompatActivity {
-    public Context appContext;
+public class BaseFragment<T extends ViewDataBinding> extends Fragment {
     public Context context;
-    public Activity activity;
-    public FieldForceApplication application;
+    public Resources resources;
     public LoadingDialog loadingDialog;
     public T binding;
 
-    private static final int PERMISSION_REQUEST_CODE = 27;
+    private static final int PERMISSION_REQUEST_CODE = 27 << 1;
     private PermissionCallback permissionCallback;
+
+    public void observeClick(View view) {
+        view.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -40,20 +48,25 @@ public class BaseActivity<T extends ViewDataBinding> extends AppCompatActivity {
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
     }
 
     @Override
-    protected void onCreate(Bundle savedInstance) {
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
-        application = FieldForceApplication.getInstance();
-        appContext = getApplicationContext();
-        context = this;
-        activity = this;
+        setRetainInstance(true);
+        resources = getResources();
+        context = getActivity();
         loadingDialog = new LoadingDialog(context, true);
-        if (getIntent().getExtras() != null) {
-            Bundle bundle = getIntent().getExtras();
+        if (getArguments() != null) {
+            Bundle bundle = getArguments();
             Set<String> keys = bundle.keySet();
 
             StringBuilder stringBuilder = new StringBuilder();
@@ -69,73 +82,6 @@ public class BaseActivity<T extends ViewDataBinding> extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        hideKeyboard(this);
-        resume();
-    }
-
-    public void resume() {
-    }
-
-    @Override
-    protected void onPause() {
-        hideKeyboard(this);
-        pause();
-        super.onPause();
-    }
-
-    public void pause() {
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        start();
-    }
-
-    public void bluetoothStatus(boolean on) {
-    }
-
-    public void start() {
-    }
-
-    @Override
-    protected void onStop() {
-        stop();
-        super.onStop();
-    }
-
-    public void stop() {
-    }
-
-    @Override
-    protected void onDestroy() {
-        destroy();
-        loadingDialog.dismiss();
-        super.onDestroy();
-    }
-
-    public void destroy() {
-    }
-
-    public void afterDismiss() {
-    }
-
-    public static void hideKeyboard(Activity activity) {
-        if (activity != null && activity.getWindow() != null && activity.getWindow().getDecorView() != null) {
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);
-            }
-        }
-    }
 
     public void showLoading(String... message) {
         loadingDialog.show(message);
@@ -145,18 +91,83 @@ public class BaseActivity<T extends ViewDataBinding> extends AppCompatActivity {
         loadingDialog.dismiss();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        resume();
+    }
+
+    public void resume() {
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        pause();
+    }
+
+    public void pause() {
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        start();
+    }
+
+    public void start() {
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        stop();
+    }
+
+    public void stop() {
+    }
+
+    public void destroy() {
+    }
+
+
+    @Override
+    public void onDestroy() {
+        destroy();
+        loadingDialog.dismiss();
+        super.onDestroy();
+        System.gc();
+        Runtime.getRuntime().gc();
+    }
+
+    public static void hideKeyboard(Context context) {
+        Activity activity = (Activity) context;
+        if (activity != null && activity.getWindow() != null && activity.getWindow().getDecorView() != null) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);
+        }
+    }
+
     public void toastView(String msg) {
-        hideKeyboard(this);
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+        hideKeyboard(context);
+        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+    }
+
+    public Snackbar snackBarView(String msg) {
+        hideKeyboard(context);
+        Snackbar snackbar = Snackbar.make(((HomeActivity) context).findViewById(android.R.id.content), msg,
+                Snackbar.LENGTH_LONG);
+        SnackbarHelper.configSnackbar(context, snackbar);
+        return snackbar;
     }
 
     public void requestPermission(Permission permission, PermissionCallback permissionCallback) {
         this.permissionCallback = permissionCallback;
-        if (permissionCallback != null && !isFinishing()) {
-            if (!PermissionUtils.isGranted(this, permission)) {
-                ActivityCompat.requestPermissions(this, new String[]{permission.toString()}, PERMISSION_REQUEST_CODE);
+        if (permissionCallback != null && !isRemoving()) {
+            if (!PermissionUtils.isGranted(context, permission)) {
+                requestPermissions(new String[]{permission.toString()}, PERMISSION_REQUEST_CODE);
             } else {
-                permissionCallback.onPermissionResult(true, false);
+                this.permissionCallback.onPermissionResult(true, false);
             }
         }
     }
@@ -168,12 +179,10 @@ public class BaseActivity<T extends ViewDataBinding> extends AppCompatActivity {
     }
 
     private void onPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == PERMISSION_REQUEST_CODE && grantResults != null && permissions != null) {
+        if (requestCode == PERMISSION_REQUEST_CODE) {
             for (int i = 0; i < grantResults.length; i++) {
-                if (permissionCallback != null) {
-                    permissionCallback.onPermissionResult(grantResults[i] == PackageManager.PERMISSION_GRANTED,
-                            !PermissionUtils.shouldShowRequestPermissionRationale(this, permissions[i]));
-                }
+                permissionCallback.onPermissionResult(grantResults[i] == PackageManager.PERMISSION_GRANTED,
+                        !PermissionUtils.shouldShowRequestPermissionRationale(getActivity(), permissions[i]));
             }
         }
     }

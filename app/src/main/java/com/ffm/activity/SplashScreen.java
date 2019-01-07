@@ -7,9 +7,9 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 
-import com.hug.mma.constants.IntentConstants;
-import com.hug.mma.util.AppUtil;
-import com.hug.mma.util.Trace;
+import com.ffm.constants.IntentConstants;
+import com.ffm.util.AppUtil;
+import com.ffm.util.Trace;
 
 import androidx.annotation.RequiresApi;
 
