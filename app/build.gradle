@@ -1,0 +1,147 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'androidx.navigation.safeargs'
+
+android {
+    def env = { ->
+        def code = project.hasProperty('env') ? env : "all"
+        return code
+    }
+    def code = 1
+    def major = 1
+    def minor = 0
+    def patch = 0
+    def suffix = ""
+    def app_name = ""
+    def url = ""
+
+    def versionPropsFile = file('version.properties')
+    if (versionPropsFile.canRead()) {
+        Properties versionProps = new Properties()
+        versionProps.load(new FileInputStream(versionPropsFile))
+        major = versionProps['major'].toInteger()
+        minor = versionProps['minor'].toInteger()
+        patch = versionProps['patch'].toInteger()
+        code = versionProps['code'].toInteger()
+    }
+    flavorDimensions "FFM"
+    compileSdkVersion rootProject.compileSdkVersion
+    defaultConfig {
+        applicationId "com.ffm"
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        versionCode code
+        versionName major + "." + minor + "." + patch
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation":
+                                     "$projectDir/schemas".toString()]
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
+            jniDebuggable false
+            renderscriptDebuggable false
+            zipAlignEnabled true
+        }
+        debug {
+            debuggable true
+            jniDebuggable true
+            renderscriptDebuggable true
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled true
+        }
+
+    }
+    dataBinding {
+        enabled = true
+    }
+
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    productFlavors {
+        if (env() == "dev" || env() == "all") {
+            def debugFile = file('dev.properties')
+            if (debugFile.canRead()) {
+                dev {
+                    dimension "FFM"
+                    Properties debugProps = new Properties()
+                    debugProps.load(new FileInputStream(debugFile))
+                    suffix = debugProps['suffix'].toString()
+                    app_name = debugProps['app.name'].toString()
+                    url = debugProps['web.url'].toString()
+                    versionNameSuffix suffix
+                    resValue "string", "app_name", app_name
+                    buildConfigField "String", "WEB_SERVICE_URL", url
+                }
+            }
+        }
+        if (env() == "prod" || env() == "all") {
+            def prodFile = file('prod.properties')
+            if (prodFile.canRead()) {
+                prod {
+                    dimension "FFM"
+                    Properties prodProps = new Properties()
+                    prodProps.load(new FileInputStream(prodFile))
+                    suffix = prodProps['suffix'].toString()
+                    app_name = prodProps['app.name'].toString()
+                    url = prodProps['web.url'].toString()
+                    versionNameSuffix suffix
+                    resValue "string", "app_name", app_name
+                    buildConfigField "String", "WEB_SERVICE_URL", url
+
+                }
+            }
+        }
+    }
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            outputFileName = "FFM_${variant.versionName}_${variant.buildType.name}.apk"
+        }
+
+    }
+}
+
+dependencies {
+    kapt "androidx.room:room-compiler:$rootProject.roomVersion"
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0-alpha1'
+    implementation "android.arch.navigation:navigation-fragment:$rootProject.navigationVersion"
+    implementation "android.arch.navigation:navigation-ui:$rootProject.navigationVersion"
+    implementation "android.arch.work:work-runtime:$rootProject.workVersion"
+    implementation "androidx.appcompat:appcompat:$rootProject.supportLibraryVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintLayoutVersion"
+    implementation "androidx.core:core:$rootProject.ktxVersion"
+    implementation "androidx.legacy:legacy-support-v4:$rootProject.legacySupportVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycleVersion"
+    implementation "androidx.recyclerview:recyclerview:$rootProject.recyclerViewVersion"
+    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
+    //implementation "androidx.room:room-common:$rootProject.roomVersion"
+    implementation "com.google.android.material:material:$rootProject.materialVersion"
+    implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
+    implementation "com.intuit.sdp:sdp-android:$rootProject.sspVersion"
+    implementation "com.intuit.ssp:ssp-android:$rootProject.sspVersion"
+    implementation "androidx.multidex:multidex:$rootProject.multidexVersion"
+    implementation "com.scottyab:secure-preferences-lib:$rootProject.securePrefVersion"
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.9.0'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+    annotationProcessor "android.arch.persistence.room:compiler:$rootProject.roomVersion"
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
