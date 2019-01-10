@@ -12,6 +12,8 @@ import com.ffm.db.room.entity.Report;
 import com.ffm.db.room.handlers.DataHandler;
 import com.ffm.db.room.viewmodels.ReportListViewModel;
 import com.ffm.listener.ListItemListener;
+import com.ffm.preference.AppPrefConstants;
+import com.ffm.preference.AppPreference;
 import com.ffm.util.GsonUtil;
 
 import java.util.ArrayList;
@@ -53,6 +55,7 @@ public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
 
     private void init() {
         setRecyclerView();
+        AppPreference.getInstance().putString(AppPrefConstants.USER_PHONE, "8008526853");
     }
 
     private void setRecyclerView() {
@@ -89,7 +92,7 @@ public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
 
     private void updateReportsFromServer() {
         //TOdo update reports from server, now load from json
-        DataHandler.getInstance().addReportsToDb(GsonUtil.readReportsJSONFile());
+        DataHandler.getInstance().addReportsToDb(GsonUtil.readReportsJSONFile(context));
         listenData();
     }
 }

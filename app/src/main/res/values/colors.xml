@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorPrimaryLight">#666666</color>
-    <color name="colorPrimaryText">#E1E1E1</color>
+    <color name="colorPrimaryText">#000000</color>
     <color name="colorPrimaryTextDark">#555555</color>
     <color name="colorSecondaryText">#E0E0E0</color>
     <color name="colorLogoBlue">#26C6DA</color>
@@ -20,7 +20,7 @@
     <color name="colorLogoVioletVeryLight">#8772F8</color>
     <color name="colorActive">#73be48</color>
     <color name="icons">#FFFFFF</color>
-    <color name="colorDivider">#E0E0E0</color>
+    <color name="colorDivider">#e9e8e8</color>
     <color name="transparentWhite10">#1AFFFFFF</color>
     <color name="transparentWhite20">#fcfcfc</color>
     <color name="transparentBlack10">#9A000000</color>
@@ -47,7 +47,7 @@
     <color name="color_green">#02b302</color>
     <color name="color_brown">#343838</color>
     <color name="color_orange">#f38a32</color>
-    <color name="color_blue">#1479b7</color>
+    <color name="color_blue">#3a7ca4</color>
     <color name="divider_grey">#e4e4e5</color>
     <color name="black_80">#88000000</color>
     <color name="fab_label_color">#dfdfdf</color>

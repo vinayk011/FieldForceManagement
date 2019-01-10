@@ -1,5 +1,7 @@
 package com.ffm.util;
 
+import android.content.Context;
+
 import com.ffm.FieldForceApplication;
 import com.ffm.db.room.entity.Report;
 import com.google.gson.Gson;
@@ -24,10 +26,10 @@ public class GsonUtil {
         return gson;
     }
 
-    public static List<Report> readReportsJSONFile() {
+    public static List<Report> readReportsJSONFile(Context context) {
         List<Report> reportsList = new ArrayList<>();
         try {
-            JSONArray jSONArray = new JSONObject(loadJSONFromAsset()).getJSONArray("reports");
+            JSONArray jSONArray = new JSONObject(loadJSONFromAsset(context)).getJSONArray("reports");
             int i = 0;
             while (jSONArray != null && i < jSONArray.length()) {
                 JSONObject jSONObject = jSONArray.getJSONObject(i);
@@ -43,9 +45,9 @@ public class GsonUtil {
         return reportsList;
     }
 
-    public static String loadJSONFromAsset() {
+    public static String loadJSONFromAsset(Context context) {
         try {
-            InputStream open = FieldForceApplication.getInstance().getAssets().open("Reports.json");
+            InputStream open = context.getAssets().open("reports.json");
             byte[] bArr = new byte[open.available()];
             open.read(bArr);
             open.close();

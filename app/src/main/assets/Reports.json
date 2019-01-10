@@ -29,6 +29,16 @@
       "reportStatus": "Started",
       "lat": 17.448657,
       "lng": 78.363197
+    },
+    {
+      "reportType": "Bank Verification",
+      "reportName": "Personal Loan",
+      "reportedBy": "person2",
+      "locationAddress": "Hafeezpet, Hyderabad,India.",
+      "reportedTime": 1527019224654,
+      "reportStatus": "Accepted",
+      "lat": 17.448657,
+      "lng": 78.363197
     }
   ]
 }

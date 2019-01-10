@@ -62,6 +62,17 @@ android {
         }
 
     }
+    signingConfigs {
+        debug {
+        }
+        release {
+            storeFile file("../keystore/ffm.jks")
+            storePassword "ffm@123"
+            keyAlias "key"
+            keyPassword "ffm@123"
+        }
+    }
+
     dataBinding {
         enabled = true
     }
