@@ -1,0 +1,34 @@
+{
+  "reports": [
+    {
+      "reportType": "Installation",
+      "reportName": "New Installation",
+      "reportedBy": "Person1",
+      "locationAddress": "Bengaluru,Karnataka,India.",
+      "reportedTime": 1547029224654,
+      "reportStatus": "Assigned",
+      "lat": 12.969049,
+      "lng": 77.601895
+    },
+    {
+      "reportType": "Bank Verification",
+      "reportName": "Personal Loan",
+      "reportedBy": "person2",
+      "locationAddress": "Hafeezpet, Hyderabad,India.",
+      "reportedTime": 1527019224654,
+      "reportStatus": "Accepted",
+      "lat": 17.448657,
+      "lng": 78.363197
+    },
+    {
+      "reportType": "Coffee machine",
+      "reportName": "Machine Cleaning",
+      "reportedBy": "person3",
+      "locationAddress": "Hitech city, Hyderabad, india.",
+      "reportedTime": 1537019224654,
+      "reportStatus": "Started",
+      "lat": 17.448657,
+      "lng": 78.363197
+    }
+  ]
+}

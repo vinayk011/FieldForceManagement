@@ -9,8 +9,10 @@ import com.ffm.R;
 import com.ffm.adapters.ReportsAdapter;
 import com.ffm.databinding.FragmentReportsBinding;
 import com.ffm.db.room.entity.Report;
+import com.ffm.db.room.handlers.DataHandler;
 import com.ffm.db.room.viewmodels.ReportListViewModel;
 import com.ffm.listener.ListItemListener;
+import com.ffm.util.GsonUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +46,7 @@ public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
             //Todo
             reportsList = (ArrayList<Report>) reportsInfo.getReports();
             binding.setHasReports(reportsList != null && !reportsList.isEmpty());
-            Collections.sort(reportsList, (d1, d2) -> d1.getName().compareTo(d2.getName()));
+            Collections.sort(reportsList, (d1, d2) -> d1.getReportType().compareTo(d2.getReportType()));
             if (reportsAdapter != null) reportsAdapter.setReports(reportsList, false);
         });
     }
@@ -58,7 +60,7 @@ public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
             reportsAdapter = new ReportsAdapter(reportsList, context, new ListItemListener() {
                 @Override
                 public void onItemClick(int position) {
-                    NavDirections directions = ReportsFragmentDirections.actionReportsFragmentToReportDetailsFragment(reportsList.get(position).getReport(), getString(R.string.report_stats));
+                    NavDirections directions = ReportsFragmentDirections.actionReportsFragmentToReportDetailsFragment(reportsList.get(position).getReportName(), getString(R.string.report_stats));
                     Navigation.findNavController(getActivity(), R.id.home_nav_fragment).navigate(directions);
                 }
 
@@ -86,7 +88,8 @@ public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
     }
 
     private void updateReportsFromServer() {
-       //TOdo update reports from server, now load from json
-
+        //TOdo update reports from server, now load from json
+        DataHandler.getInstance().addReportsToDb(GsonUtil.readReportsJSONFile());
+        listenData();
     }
 }

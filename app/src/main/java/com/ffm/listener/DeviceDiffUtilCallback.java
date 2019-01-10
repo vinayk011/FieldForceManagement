@@ -28,8 +28,8 @@ public class DeviceDiffUtilCallback extends DiffUtil.Callback {
         Report oldModel = oldList.get(oldItemPosition);
 
         Bundle diff = new Bundle();
-        if (!newModel.getReport().equals(oldModel.getReport())
-                || !newModel.getName().equals(oldModel.getName())) {
+        if (!newModel.getReportName().equals(oldModel.getReportName())
+                || !newModel.getReportType().equals(oldModel.getReportType())) {
             diff.putSerializable(REPORT_ID, newModel);
         }
         if (diff.size() == 0) {
@@ -50,7 +50,7 @@ public class DeviceDiffUtilCallback extends DiffUtil.Callback {
 
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        return newList.get(newItemPosition).getReport().equals(oldList.get(oldItemPosition).getReport());
+        return newList.get(newItemPosition).getReportName().equals(oldList.get(oldItemPosition).getReportName());
     }
 
     @Override
