@@ -10,5 +10,6 @@ public class AppPrefConstants {
 
     public static final String SYNC_FROM_SERVER = "sync_from_server";
     public static final String PREF_LANGUAGE = "pref_language";
-    public static final String PREF_SUMMARY_GRAPH = "pref_summary_graph";
+    public static final String KEY_PAIR_BIOMETRIC = "key_pair_biometric";
+    public static final String KEY_REGISTER_BIOMETRIC = "key_register_biometric";
 }

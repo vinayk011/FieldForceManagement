@@ -2,6 +2,7 @@ package com.ffm.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -10,7 +11,9 @@ import android.widget.Toast;
 
 
 import com.ffm.FieldForceApplication;
+import com.ffm.R;
 import com.ffm.dialog.LoadingDialog;
+import com.ffm.listener.DialogListener;
 import com.ffm.permission.Permission;
 import com.ffm.permission.PermissionCallback;
 import com.ffm.permission.PermissionUtils;
@@ -19,6 +22,7 @@ import com.ffm.util.Trace;
 import java.util.Set;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.ViewDataBinding;
@@ -82,6 +86,7 @@ public class BaseActivity<T extends ViewDataBinding> extends AppCompatActivity {
     }
 
     public void resume() {
+
     }
 
     @Override
@@ -136,6 +141,32 @@ public class BaseActivity<T extends ViewDataBinding> extends AppCompatActivity {
             }
         }
     }
+
+    public void showAlert(String title, String message, boolean typeConfirm, DialogListener listener) {
+        if (!((Activity) context).isFinishing()) {
+            AlertDialog.Builder builder;
+            builder = new AlertDialog.Builder(context, R.style.MyAlertDialogStyle);
+            builder.setTitle(title)
+                    .setMessage(message)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // continue with delete
+                            listener.ok();
+                        }
+                    });
+            if (typeConfirm) {
+                builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                });
+            }
+            builder.setIcon(android.R.drawable.ic_dialog_alert)
+                    .setCancelable(false)
+                    .show();
+        }
+    }
+
 
     public void showLoading(String... message) {
         loadingDialog.show(message);

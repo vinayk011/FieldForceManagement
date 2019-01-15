@@ -43,7 +43,11 @@ public class SplashScreen extends BaseActivity {
 
     private void goNext() {
         Trace.i("nexts");
+        verifyBioMetric();
         AppUtil.dashboard(this);
+    }
+
+    private void verifyBioMetric() {
     }
 
 

@@ -2,18 +2,22 @@ package com.ffm;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
 
 import com.ffm.db.room.AppDatabase;
 import com.ffm.db.room.handlers.DataHandler;
+import com.ffm.listener.DialogListener;
 import com.ffm.preference.AppPreference;
 import com.ffm.util.SnackbarHelper;
 import com.ffm.util.Trace;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
 
@@ -40,7 +44,7 @@ public class FieldForceApplication extends MultiDexApplication {
         return application;
     }
 
-    public static void showToast(@NonNull final String msg) {
+    public void showToast(@NonNull final String msg) {
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
             @Override
@@ -54,6 +58,7 @@ public class FieldForceApplication extends MultiDexApplication {
             }
         });
     }
+
 
     public static Snackbar snackBarView(Context context, String msg) {
         Snackbar snackbar = Snackbar.make(((Activity) context).findViewById(android.R.id.content), msg,

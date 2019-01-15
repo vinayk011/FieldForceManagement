@@ -6,8 +6,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.an.biometric.BiometricCallback;
+import com.an.biometric.BiometricManager;
+import com.ffm.FieldForceApplication;
 import com.ffm.R;
 import com.ffm.databinding.ActivityHomeBinding;
+import com.ffm.listener.DialogListener;
 import com.ffm.preference.AppPrefConstants;
 import com.ffm.preference.AppPreference;
 import com.ffm.util.MyContextWrapper;
@@ -26,10 +30,11 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-public class HomeActivity extends BaseActivity<ActivityHomeBinding>  {
+public class HomeActivity extends BaseActivity<ActivityHomeBinding> implements BiometricCallback {
     private DrawerLayout drawerLayout;
     private AppBarConfiguration appBarConfiguration;
     private NavController navController;
+    private BiometricManager biometricManager;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -80,9 +85,9 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding>  {
         NavInflater inflater = navHostFragment.getNavController().getNavInflater();
         NavGraph graph = inflater.inflate(R.navigation.navigation_graph);
         graph.setDefaultArguments(getIntent().getExtras());
-        if (false){//!AppPreference.getInstance().getBoolean(AppPrefConstants.SIGN_IN)) {
+        if (false) {//!AppPreference.getInstance().getBoolean(AppPrefConstants.SIGN_IN)) {
             Trace.i("");
-           // graph.setStartDestination(R.id.signin_fragment);
+            // graph.setStartDestination(R.id.signin_fragment);
         } else {
             graph.setStartDestination(R.id.reports_fragment);
         }
@@ -97,6 +102,23 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding>  {
     public boolean onSupportNavigateUp() {
         super.onSupportNavigateUp();
         return navController.navigateUp();
+    }
+
+
+    public void resume() {
+        verifyBiometric();
+    }
+
+    private void verifyBiometric() {
+        if (biometricManager == null) {
+            biometricManager = new BiometricManager.BiometricBuilder(this)
+                    .setTitle(getString(R.string.biometric_title))
+                    .setSubtitle(getString(R.string.biometric_subtitle))
+                    .setDescription(getString(R.string.biometric_description))
+                    .setNegativeButtonText(getString(R.string.biometric_negative_button_text))
+                    .build();
+        }
+        biometricManager.authenticate(this);
     }
 
     private void loadLocale() {
@@ -147,8 +169,77 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding>  {
         return navController;
     }
 
+    public void pause() {
+        if (biometricManager != null) {
+            biometricManager.dismissBiometricDialog();
+        }
+    }
 
     public void destroy() {
-        AppPreference.getInstance().remove(AppPrefConstants.PREF_SUMMARY_GRAPH);
+
+    }
+
+    @Override
+    public void onSdkVersionNotSupported() {
+        //FieldForceApplication.getInstance().showToast(getString(R.string.biometric_error_sdk_not_supported));
+        showAlert(getString(R.string.alert), getString(R.string.biometric_error_sdk_not_supported),
+                false, () -> {
+                    finish();
+                });
+    }
+
+    @Override
+    public void onBiometricAuthenticationNotSupported() {
+        showAlert(getString(R.string.alert), getString(R.string.biometric_error_hardware_not_supported),
+                false, () -> {
+                    finish();
+                });
+    }
+
+    @Override
+    public void onBiometricAuthenticationNotAvailable() {
+        FieldForceApplication.getInstance().showToast(getString(R.string.biometric_error_fingerprint_not_available));
+    }
+
+    @Override
+    public void onBiometricAuthenticationPermissionNotGranted() {
+        FieldForceApplication.getInstance().showToast(getString(R.string.biometric_error_permission_not_granted));
+    }
+
+    @Override
+    public void onBiometricAuthenticationInternalError(String error) {
+        FieldForceApplication.getInstance().showToast(error);
+    }
+
+    @Override
+    public void onAuthenticationFailed() {
+        FieldForceApplication.getInstance().showToast(getString(R.string.biometric_failure));
+    }
+
+    @Override
+    public void onAuthenticationCancelled() {
+        showAlert(getString(R.string.alert), getString(R.string.biometric_cancelled),
+                false, () -> {
+                    finish();
+                });
+    }
+
+    @Override
+    public void onAuthenticationSuccessful() {
+        FieldForceApplication.getInstance().showToast(getString(R.string.biometric_success));
+    }
+
+    @Override
+    public void onAuthenticationHelp(int helpCode, CharSequence helpString) {
+        FieldForceApplication.getInstance().showToast(helpString.toString());
+    }
+
+    @Override
+    public void onAuthenticationError(int errorCode, CharSequence errString) {
+        //FieldForceApplication.getInstance().showToast(errString.toString());
+        showAlert(getString(R.string.alert), errString.toString(),
+                false, () -> {
+                    finish();
+                });
     }
 }
