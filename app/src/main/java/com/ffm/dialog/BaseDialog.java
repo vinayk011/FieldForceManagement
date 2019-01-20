@@ -15,9 +15,9 @@ import androidx.databinding.ViewDataBinding;
 
 public class BaseDialog<T extends ViewDataBinding> extends Dialog {
     Context context;
-    T binding;
+    public T binding;
 
-    BaseDialog(@NonNull Context context) {
+    public BaseDialog(@NonNull Context context) {
         super(context);
         this.context = context;
     }

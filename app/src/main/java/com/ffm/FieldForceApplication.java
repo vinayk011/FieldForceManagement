@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
+import io.paperdb.Paper;
 
 public class FieldForceApplication extends MultiDexApplication {
     private static FieldForceApplication application;
@@ -36,6 +37,7 @@ public class FieldForceApplication extends MultiDexApplication {
         super.onCreate();
         application = this;
         AppPreference.init(application);
+        Paper.init(application);
         AppDatabase.getDatabase(getApplicationContext());
         DataHandler.init();
     }

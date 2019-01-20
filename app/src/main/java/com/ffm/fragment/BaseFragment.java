@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment;
 
 public class BaseFragment<T extends ViewDataBinding> extends Fragment {
     public Context context;
+    public Activity activity;
     public Resources resources;
     public LoadingDialog loadingDialog;
     public T binding;
@@ -64,6 +65,7 @@ public class BaseFragment<T extends ViewDataBinding> extends Fragment {
         setRetainInstance(true);
         resources = getResources();
         context = getActivity();
+        activity = getActivity();
         loadingDialog = new LoadingDialog(context, true);
         if (getArguments() != null) {
             Bundle bundle = getArguments();

@@ -19,4 +19,23 @@
     <string name="biometric_cancelled">Authentication cancelled by user</string>
     <string name="biometric_success">Login Successful</string>
     <string name="alert">Alert</string>
+    <string name="take_photo">Take photo</string>
+    <string name="icon">Icon</string>
+    <string name="tap_to_take_photo">Tap to take a photo</string>
+
+
+    <string name="cancel">Cancel</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="please_turn_on_permissions_at_setting_permission"><![CDATA[Please turn on permissions at\n[Setting] > [Permission]]]></string>
+    <string name="request">Request</string>
+    <string name="Camera_permission_request_text">Camera permission is required to take images.</string>
+    <string name="location_permission_request_text">Location permission is required to capture use geo location.</string>
+    <string name="select_an_action">Select an Action</string>
+    <string name="launch_camera">Launch Camera</string>
+    <string name="permissions_denied">Permission Denied</string>
+    <string name="successfully_image_saved_to_server">Successfully profile picture saved to server</string>
+    <string name="failed_try_again">Failed. Try again.</string>
+    <string name="picture_crop_size_too_small">Picture is too small. Crop should be minimum of 250 * 250</string>
+    <string name="picture_uploaded">Piture of customer location is uploaded</string>
+    <string name="customer_location_picture">Customer Location Picture</string>
 </resources>

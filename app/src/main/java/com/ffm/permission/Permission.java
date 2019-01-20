@@ -6,8 +6,9 @@ import android.Manifest;
 
 public enum Permission {
 
-
+    CAMERA(Manifest.permission.CAMERA),
     FINE_LOCATION(Manifest.permission.ACCESS_FINE_LOCATION),
+    WRITE_STORAGE(Manifest.permission.WRITE_EXTERNAL_STORAGE),
     COARSE_LOCATION(Manifest.permission.ACCESS_COARSE_LOCATION);
 
     String permission;

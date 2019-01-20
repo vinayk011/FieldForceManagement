@@ -10,6 +10,7 @@ import com.an.biometric.BiometricCallback;
 import com.an.biometric.BiometricManager;
 import com.ffm.FieldForceApplication;
 import com.ffm.R;
+import com.ffm.constants.IntentConstants;
 import com.ffm.databinding.ActivityHomeBinding;
 import com.ffm.listener.DialogListener;
 import com.ffm.preference.AppPrefConstants;
@@ -177,6 +178,22 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> implements B
 
     public void destroy() {
 
+    }
+
+    public void showCropAndUpload(String path) {
+
+        Bundle bundle = new Bundle();
+        bundle.putString(IntentConstants.EXTRA, path);
+        getNavController().navigate(R.id.image_crop_fragment, bundle);
+        /*if (!(fragmentStackHandler.getLastFragment() instanceof ImageCropFragment)) {
+            Fragment fragment = new ImageCropFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(IntentConstants.EXTRA, path);
+            fragment.setArguments(bundle);
+            fragmentStackHandler.startAndAddFragmentToStack(fragment, activityDashboardBinding.homeContainer.getId());
+            activityDashboardBinding.optionsLayout.setVisibility(View.INVISIBLE);
+            activityDashboardBinding.back.setVisibility(View.VISIBLE);
+        }*/
     }
 
     @Override

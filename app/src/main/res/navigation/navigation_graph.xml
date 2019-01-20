@@ -23,7 +23,7 @@
         android:id="@+id/report_details_fragment"
         android:name="com.ffm.fragment.ReportDetailsFragment"
         android:label="@string/report_details"
-        tools:layout="@layout/fragment_report_details" >
+        tools:layout="@layout/fragment_report_details">
         <argument
             android:name="deviceId"
             app:argType="string" />
@@ -32,9 +32,13 @@
             app:argType="string" />
     </fragment>
 
-    <!--<fragment
-        android:id="@+id/settings_fragment"
-        android:name="com.ffm.fragment.SettingsFragment"
-        android:label="@string/settings"
-        tools:layout="@layout/fragment_settings" />-->
+    <fragment
+        android:id="@+id/image_crop_fragment"
+        android:name="com.ffm.fragment.ImageCropFragment"
+        android:label="@string/customer_location_picture"
+        tools:layout="@layout/fragment_image_crop">
+        <argument
+            android:name="imagePath"
+            app:argType="string" />
+    </fragment>
 </navigation>

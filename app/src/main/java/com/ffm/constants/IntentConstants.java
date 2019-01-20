@@ -8,7 +8,7 @@ public class IntentConstants {
     public static final String REPORT_ID = "reportId";
     public static final String ACTION_PROGRESS = "com.ffm.service.cg.progress";
     public static final String DATE = "date";
-
+    public static final String EXTRA = "extra";
 
 
 }
