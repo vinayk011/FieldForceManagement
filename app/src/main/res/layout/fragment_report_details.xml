@@ -183,7 +183,6 @@
                         android:layout_margin="@dimen/_2sdp"
                         android:layout_weight="1"
                         android:background="@color/colorDivider"
-                        android:clickable="true"
                         android:drawableBottom="@drawable/ic_action_addnote"
                         android:elevation="@dimen/_2sdp"
                         android:focusable="true"
@@ -197,15 +196,17 @@
 
                     <FrameLayout
                         android:layout_width="0dp"
-                        android:layout_height="@dimen/_65sdp"
+                        android:layout_height="@dimen/_75sdp"
                         android:layout_margin="@dimen/_2sdp"
                         android:layout_weight="1">
 
                         <ImageView
                             android:id="@+id/upload_image"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_250sdp"
+                            android:layout_width="@dimen/_75sdp"
+                            android:layout_height="@dimen/_75sdp"
+                            android:layout_gravity="center"
                             android:contentDescription="@string/icon"
+                            android:scaleType="fitCenter"
                             app:image_big="@{image}"/>
 
                         <TextView

@@ -15,7 +15,9 @@ import com.ffm.activity.HomeActivity;
 import com.ffm.databinding.FragmentReportDetailsBinding;
 import com.ffm.db.paper.PaperConstants;
 import com.ffm.db.paper.PaperDB;
+import com.ffm.dialog.CustomerResponseDialog;
 import com.ffm.dialog.ImageSelectDialog;
+import com.ffm.listener.CustomerResponseListener;
 import com.ffm.listener.ImageSelectListener;
 import com.ffm.listener.UpdateJobListener;
 import com.ffm.permission.AskForPermissionDialog;
@@ -24,6 +26,7 @@ import com.ffm.permission.Permission;
 import com.ffm.permission.PermissionCallback;
 import com.ffm.preference.AppPrefConstants;
 import com.ffm.preference.AppPreference;
+import com.ffm.util.Trace;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -96,7 +99,9 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
     private UpdateJobListener jobListener = new UpdateJobListener() {
         @Override
         public void onAddCustomerResponse() {
-
+            new CustomerResponseDialog(context, response -> {
+                Trace.i("Customer response :" + response);
+            }).show();
         }
 
         @Override

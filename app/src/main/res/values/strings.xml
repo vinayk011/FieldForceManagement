@@ -38,4 +38,5 @@
     <string name="picture_crop_size_too_small">Picture is too small. Crop should be minimum of 250 * 250</string>
     <string name="picture_uploaded">Piture of customer location is uploaded</string>
     <string name="customer_location_picture">Customer Location Picture</string>
+    <string name="add_customer_response">Enter customer response</string>
 </resources>
