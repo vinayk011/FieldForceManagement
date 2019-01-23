@@ -42,7 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
-                android:lines="5"
+                android:maxLines="6"
                 android:textColor="@color/colorPrimaryBg"
                 android:scrollbars="vertical" />
         </LinearLayout>
@@ -55,7 +55,7 @@
                 android:id="@+id/cancel"
                 style="@style/button_2"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/_35sdp"
+                android:layout_height="@dimen/_40sdp"
                 android:layout_weight="1"
                 android:onClick="@{() -> callback.cancel()}"
                 android:text="@string/cancel"
@@ -67,7 +67,7 @@
                 android:id="@+id/ok"
                 style="@style/button_2"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/_35sdp"
+                android:layout_height="@dimen/_40sdp"
                 android:layout_weight="1"
                 android:onClick="@{() -> callback.ok()}"
                 android:text="Add Response"

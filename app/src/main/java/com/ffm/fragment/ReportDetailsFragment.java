@@ -100,6 +100,7 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
         @Override
         public void onAddCustomerResponse() {
             new CustomerResponseDialog(context, response -> {
+                //Todo fetch location and update along with response
                 Trace.i("Customer response :" + response);
             }).show();
         }

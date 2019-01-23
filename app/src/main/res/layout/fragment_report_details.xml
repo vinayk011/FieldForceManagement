@@ -6,7 +6,8 @@
 
     <data>
 
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
+
         <variable
             name="report"
             type="com.ffm.db.room.entity.Report" />
@@ -14,6 +15,7 @@
         <variable
             name="updateListener"
             type="com.ffm.listener.UpdateJobListener" />
+
         <variable
             name="image"
             type="android.graphics.Bitmap" />
@@ -170,6 +172,7 @@
                     android:textSize="@dimen/_10ssp" />
 
                 <LinearLayout
+                    android:id="@+id/layout_response"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/job_type"
@@ -187,10 +190,10 @@
                         android:elevation="@dimen/_2sdp"
                         android:focusable="true"
                         android:gravity="center"
+                        android:onClick="@{() -> updateListener.onAddCustomerResponse()}"
                         android:padding="@dimen/_10sdp"
                         android:text="Add Customer Response"
                         android:textColor="@color/colorPrimaryTextDark"
-                        android:onClick="@{() -> updateListener.onAddCustomerResponse()}"
                         android:textSize="@dimen/_10ssp" />
 
 
@@ -207,7 +210,7 @@
                             android:layout_gravity="center"
                             android:contentDescription="@string/icon"
                             android:scaleType="fitCenter"
-                            app:image_big="@{image}"/>
+                            app:image_big="@{image}" />
 
                         <TextView
                             android:id="@+id/close"
@@ -218,7 +221,7 @@
                             android:drawableStart="@drawable/ic_close"
                             android:padding="@dimen/_3sdp"
                             android:textSize="@dimen/_15ssp"
-                            android:visibility="@{image != null ? View.VISIBLE : View.GONE}"/>
+                            android:visibility="@{image != null ? View.VISIBLE : View.GONE}" />
 
                         <TextView
                             android:id="@+id/photo_hint"
@@ -226,10 +229,10 @@
                             android:layout_height="match_parent"
                             android:background="@drawable/scan_square"
                             android:gravity="center"
-                            android:text="@string/tap_to_take_photo"
                             android:onClick="@{() -> updateListener.onClickEditPhoto()}"
+                            android:text="@string/tap_to_take_photo"
                             android:textSize="@dimen/_12sdp"
-                            android:visibility="@{image != null ? View.GONE : View.VISIBLE}"/>
+                            android:visibility="@{image != null ? View.GONE : View.VISIBLE}" />
 
                     </FrameLayout>
                 </LinearLayout>
