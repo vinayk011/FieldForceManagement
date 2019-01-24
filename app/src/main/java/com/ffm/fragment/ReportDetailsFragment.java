@@ -1,6 +1,7 @@
 package com.ffm.fragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,6 +16,8 @@ import com.ffm.activity.HomeActivity;
 import com.ffm.databinding.FragmentReportDetailsBinding;
 import com.ffm.db.paper.PaperConstants;
 import com.ffm.db.paper.PaperDB;
+import com.ffm.db.room.entity.Report;
+import com.ffm.db.room.viewmodels.ReportListViewModel;
 import com.ffm.dialog.CustomerResponseDialog;
 import com.ffm.dialog.ImageSelectDialog;
 import com.ffm.listener.CustomerResponseListener;
@@ -24,14 +27,24 @@ import com.ffm.permission.AskForPermissionDialog;
 import com.ffm.permission.AskForPermissionListener;
 import com.ffm.permission.Permission;
 import com.ffm.permission.PermissionCallback;
+import com.ffm.permission.PermissionUtils;
 import com.ffm.preference.AppPrefConstants;
 import com.ffm.preference.AppPreference;
 import com.ffm.util.Trace;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -39,11 +52,12 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
 
-public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBinding> {
+public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBinding> implements OnMapReadyCallback {
 
 
     private AskForPermissionDialog askForPermissionDialog;
@@ -51,6 +65,12 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
     private final static int IMG_RESULT = 26;
     private final static int CAMERA_REQUEST = 24;
     private final static int UPLOAD_REQUEST = 23;
+    private GoogleMap googleMap;
+    int complaintId;
+
+    private ReportListViewModel reportsViewModel;
+    private ArrayList<Report> reportsList = new ArrayList<>();
+    private Report report = new Report();
 
 
     @Nullable
@@ -59,12 +79,39 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
         binding = (FragmentReportDetailsBinding) DataBindingUtil.inflate(inflater, R.layout.fragment_report_details, container, false);
         observeClick(binding.getRoot());
         readArgs();
+        requestLocation(false);
+        binding.mapView.onCreate(savedInstanceState);
+        binding.mapView.onResume();
+        try {
+            MapsInitializer.initialize(context);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        binding.mapView.getMapAsync(this);
         init();
         return binding.getRoot();
     }
 
     private void readArgs() {
+        if (getArguments() != null) {
+            complaintId = ReportDetailsFragmentArgs.fromBundle(getArguments()).getComplaintId();
+            Trace.i("Complaint ID:" + complaintId);
+            listenData();
+        }
+    }
 
+    private void listenData() {
+        reportsViewModel = ViewModelProviders.of(this).get(ReportListViewModel.class);
+        reportsViewModel.getReports().observe(this, reportsInfo -> {
+            //Todo
+            reportsList = (ArrayList<Report>) reportsInfo.getReports();
+            if (!reportsList.isEmpty() && complaintId < reportsList.size()) {
+                binding.setReport(reportsList.get(complaintId));
+                report = reportsList.get(complaintId);
+                Trace.i("Report:" + report.toString());
+                onMapReady(googleMap);
+            }
+        });
     }
 
     private void init() {
@@ -76,6 +123,23 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
         binding.setImage(PaperDB.getInstance().getImageBitmap());
     }
 
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        if (PermissionUtils.isGranted(context, Permission.FINE_LOCATION)) {
+            this.googleMap = googleMap;
+            this.googleMap.setMyLocationEnabled(true);
+            //To add marker
+            LatLng location = new LatLng(report.getLat(), report.getLng());
+            this.googleMap.addMarker(new MarkerOptions().position(location).title("Title").snippet("Marker Description"));
+            // For zooming functionality
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(location).zoom(12).build();
+            this.googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        } else {
+            requestLocation(false);
+        }
+    }
+
     public void resume() {
         if (getUserVisibleHint()) {
             hideKeyboard(context);
@@ -83,6 +147,8 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
                 AppPreference.getInstance().remove(AppPrefConstants.JOB_PIC_UPDATE);
                 binding.setImage(PaperDB.getInstance().getImageBitmap());
             }
+            binding.mapView.onResume();
+            attachObservers();
         }
     }
 
@@ -91,11 +157,22 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
         if (askForPermissionDialog != null && askForPermissionDialog.isShowing()) {
             askForPermissionDialog.dismiss();
         }
+        binding.mapView.onPause();
        /* if (uiWarningDialog != null && uiWarningDialog.isShowing()) {
             uiWarningDialog.dismiss();
         }*/
     }
 
+
+    public void destroy() {
+        binding.mapView.onDestroy();
+    }
+
+    private void attachObservers() {
+        if (reportsViewModel != null) {
+            reportsViewModel.run(this);
+        }
+    }
 
     private UpdateJobListener jobListener = new UpdateJobListener() {
         @Override
@@ -132,7 +209,7 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
             @Override
             public void onPermissionResult(boolean granted, boolean neverAsk) {
                 if (granted) {
-                    requestLocation();
+                    requestLocation(true);
                 } else {
                     if (askForPermissionDialog != null && askForPermissionDialog.isShowing()) {
                         askForPermissionDialog.dismiss();
@@ -153,15 +230,17 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
         });
     }
 
-    private void requestLocation() {
+    private void requestLocation(boolean forCamera) {
         requestPermission(Permission.FINE_LOCATION, new PermissionCallback() {
             @Override
             public void onPermissionResult(boolean granted, boolean neverAsk) {
                 if (granted) {
                     //Todo
                     //startScan(ScanConstants.OPEN_CAMERA);
-                    EasyImage.openCamera(ReportDetailsFragment.this, CAMERA_REQUEST);
-                    startApiClient();
+                    if (forCamera) {
+                        EasyImage.openCamera(ReportDetailsFragment.this, CAMERA_REQUEST);
+                        startApiClient();
+                    }
                 } else {
                     if (askForPermissionDialog != null && askForPermissionDialog.isShowing()) {
                         askForPermissionDialog.dismiss();
@@ -169,7 +248,7 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
                     askForPermissionDialog = new AskForPermissionDialog(context, getString(R.string.location_permission_request_text), neverAsk, new AskForPermissionListener() {
                         @Override
                         public void ask() {
-                            requestLocation();
+                            requestLocation(forCamera);
                         }
 
                         @Override

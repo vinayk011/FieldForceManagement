@@ -32,9 +32,9 @@ public class GsonUtil {
             int i = 0;
             while (jSONArray != null && i < jSONArray.length()) {
                 JSONObject jSONObject = jSONArray.getJSONObject(i);
-                reportsList.add(new Report(jSONObject.getString("reportType"), jSONObject.getString("reportName"),
+                reportsList.add(new Report(jSONObject.getInt("complaintId"),jSONObject.getString("type"), jSONObject.getString("description"),
                         jSONObject.getString("reportedBy"), jSONObject.getString("locationAddress"), jSONObject.getLong("reportedTime"),
-                        jSONObject.getString("reportStatus"), jSONObject.getDouble("lat"), jSONObject.getDouble("lng")));
+                        jSONObject.getString("complaintStatus"), jSONObject.getDouble("lat"), jSONObject.getDouble("lng")));
                 i++;
             }
         } catch (Exception e) {

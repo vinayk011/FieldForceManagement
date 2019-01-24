@@ -25,8 +25,8 @@
         android:label="@string/report_details"
         tools:layout="@layout/fragment_report_details">
         <argument
-            android:name="deviceId"
-            app:argType="string" />
+            android:name="complaintId"
+            app:argType="integer" />
         <argument
             android:name="summaryType"
             app:argType="string" />

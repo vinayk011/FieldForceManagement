@@ -7,12 +7,13 @@ import androidx.room.Ignore;
 
 
 public class Report implements Comparable, Serializable {
-    private String reportType;
-    private String reportName;
+    private int complaintId;
+    private String type;
+    private String description;
     private String reportedBy;
     private String locationAddress;
     private long reportedTime;
-    private String reportStatus;
+    private String complaintStatus;
     private double lat;
     private double lng;
 
@@ -24,13 +25,14 @@ public class Report implements Comparable, Serializable {
     public Report() {
     }
 
-    public Report(String reportType, String reportName, String reportedBy, String locationAddress, long reportedTime, String reportStatus, double lat, double lng) {
-        this.reportType = reportType;
-        this.reportName = reportName;
+    public Report(int complaintId, String Type, String description, String reportedBy, String locationAddress, long reportedTime, String complaintStatus, double lat, double lng) {
+        this.complaintId = complaintId;
+        this.type = Type;
+        this.description = description;
         this.reportedBy = reportedBy;
         this.locationAddress = locationAddress;
         this.reportedTime = reportedTime;
-        this.reportStatus = reportStatus;
+        this.complaintStatus = complaintStatus;
         this.lat = lat;
         this.lng = lng;
     }
@@ -39,27 +41,35 @@ public class Report implements Comparable, Serializable {
     public int compareTo(Object o) {
         Report compare = (Report) o;
 
-        if (compare.reportName.equals(this.reportName) && compare.reportType.equals(this.reportType)) {
+        if (compare.description.equals(this.description) && compare.type.equals(this.type)) {
             return 0;
         }
         return 1;
     }
 
 
-    public String getReportType() {
-        return reportType;
+    public int getComplaintId() {
+        return complaintId;
     }
 
-    public void setReportType(String reportType) {
-        this.reportType = reportType;
+    public void setComplaintId(int complaintId) {
+        this.complaintId = complaintId;
     }
 
-    public String getReportName() {
-        return reportName;
+    public String getType() {
+        return type;
     }
 
-    public void setReportName(String reportName) {
-        this.reportName = reportName;
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getLocationAddress() {
@@ -78,12 +88,12 @@ public class Report implements Comparable, Serializable {
         this.reportedTime = reportedTime;
     }
 
-    public String getReportStatus() {
-        return reportStatus;
+    public String getComplaintStatus() {
+        return complaintStatus;
     }
 
-    public void setReportStatus(String reportStatus) {
-        this.reportStatus = reportStatus;
+    public void setComplaintStatus(String complaintStatus) {
+        this.complaintStatus = complaintStatus;
     }
 
     public String getReportedBy() {

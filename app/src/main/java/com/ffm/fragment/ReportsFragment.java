@@ -48,7 +48,7 @@ public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
             //Todo
             reportsList = (ArrayList<Report>) reportsInfo.getReports();
             binding.setHasReports(reportsList != null && !reportsList.isEmpty());
-            Collections.sort(reportsList, (d1, d2) -> d1.getReportType().compareTo(d2.getReportType()));
+            Collections.sort(reportsList, (d1, d2) -> d1.getType().compareTo(d2.getType()));
             if (reportsAdapter != null) reportsAdapter.setReports(reportsList, false);
         });
     }
@@ -63,7 +63,7 @@ public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
             reportsAdapter = new ReportsAdapter(reportsList, context, new ListItemListener() {
                 @Override
                 public void onItemClick(int position) {
-                    NavDirections directions = ReportsFragmentDirections.actionReportsFragmentToReportDetailsFragment(reportsList.get(position).getReportName(), getString(R.string.report_stats));
+                    NavDirections directions = ReportsFragmentDirections.actionReportsFragmentToReportDetailsFragment(reportsList.get(position).getComplaintId(), getString(R.string.report_stats));
                     Navigation.findNavController(getActivity(), R.id.home_nav_fragment).navigate(directions);
                 }
 

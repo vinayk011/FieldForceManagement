@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/text_view_bg"
-                android:text="@{reportInfo.reportType}"
+                android:text="@{reportInfo.complaintStatus}"
                 android:textColor="@color/colorPrimaryBg"
                 android:textSize="@dimen/_12ssp"
                 android:padding="@dimen/_3sdp"
@@ -42,7 +42,7 @@
                 android:id="@+id/report_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{reportInfo.reportName}"
+                android:text="@{reportInfo.description}"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="@dimen/_14ssp"
                 android:layout_below="@+id/report_type"/>
