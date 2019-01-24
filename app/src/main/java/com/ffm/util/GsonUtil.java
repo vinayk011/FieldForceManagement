@@ -39,7 +39,7 @@ public class GsonUtil {
                 i++;
             }
         } catch (Exception e) {
-            Trace.e("Error parsing Reports.json");
+            Trace.e("Error parsing reports.json");
         }
         Trace.i(" " + Arrays.toString(reportsList.toArray()));
         return reportsList;
