@@ -64,11 +64,15 @@ android {
     }
     signingConfigs {
         debug {
+            storeFile file("../keystore/ffm.jks")
+            storePassword "ffm@123"
+            keyAlias "ffm_key"
+            keyPassword "ffm@123"
         }
         release {
             storeFile file("../keystore/ffm.jks")
             storePassword "ffm@123"
-            keyAlias "key"
+            keyAlias "ffm_key"
             keyPassword "ffm@123"
         }
     }
@@ -76,6 +80,7 @@ android {
     dataBinding {
         enabled = true
     }
+
 
 
     compileOptions {
@@ -148,12 +153,12 @@ dependencies {
     implementation "com.scottyab:secure-preferences-lib:$rootProject.securePrefVersion"
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.9.0'
-    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.11.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
 
-    implementation 'com.google.android.gms:play-services-location:15.0.1'
-    implementation 'com.google.android.gms:play-services-gcm:15.0.1'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+    implementation 'com.google.android.gms:play-services-gcm:16.0.0'
     implementation 'io.paperdb:paperdb:2.6'
     implementation 'com.isseiaoki:simplecropview:1.1.6'
     implementation 'com.github.jkwiecien:EasyImage:2.0.3'

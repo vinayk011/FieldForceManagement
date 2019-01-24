@@ -2,7 +2,6 @@ package com.ffm.util;
 
 import android.content.Context;
 
-import com.ffm.FieldForceApplication;
 import com.ffm.db.room.entity.Report;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -39,7 +38,7 @@ public class GsonUtil {
                 i++;
             }
         } catch (Exception e) {
-            Trace.e("Error parsing reports.json");
+            Trace.e("Error parsing Reports.json");
         }
         Trace.i(" " + Arrays.toString(reportsList.toArray()));
         return reportsList;
@@ -47,7 +46,7 @@ public class GsonUtil {
 
     public static String loadJSONFromAsset(Context context) {
         try {
-            InputStream open = context.getAssets().open("reports.json");
+            InputStream open = context.getAssets().open("complaints.json");
             byte[] bArr = new byte[open.available()];
             open.read(bArr);
             open.close();

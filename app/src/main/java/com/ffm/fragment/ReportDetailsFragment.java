@@ -52,6 +52,7 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
     private final static int CAMERA_REQUEST = 24;
     private final static int UPLOAD_REQUEST = 23;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
