@@ -43,7 +43,7 @@
 
     <color name="fab_shade">#AA000000</color>
     <color name="bg_row_background">#fa315b</color>
-
+    <color name="action_bar">#3e3e3e</color>
     <color name="color_green">#02b302</color>
     <color name="color_brown">#343838</color>
     <color name="color_orange">#f38a32</color>

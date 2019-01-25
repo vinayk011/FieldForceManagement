@@ -17,6 +17,7 @@ import com.ffm.databinding.FragmentReportDetailsBinding;
 import com.ffm.db.paper.PaperConstants;
 import com.ffm.db.paper.PaperDB;
 import com.ffm.db.room.entity.Report;
+import com.ffm.db.room.handlers.DataHandler;
 import com.ffm.db.room.viewmodels.ReportListViewModel;
 import com.ffm.dialog.CustomerResponseDialog;
 import com.ffm.dialog.ImageSelectDialog;
@@ -30,6 +31,7 @@ import com.ffm.permission.PermissionCallback;
 import com.ffm.permission.PermissionUtils;
 import com.ffm.preference.AppPrefConstants;
 import com.ffm.preference.AppPreference;
+import com.ffm.util.GsonUtil;
 import com.ffm.util.Trace;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -41,6 +43,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.button.MaterialButton;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -54,6 +57,7 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavDirections;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
@@ -123,13 +127,33 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
             binding.setImage(null);
         });
         binding.setImage(PaperDB.getInstance().getImageBitmap());
-        binding.mapView.setOnClickListener(new View.OnClickListener() {
+        binding.updateStatus.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                NavDirections directions = ReportDetailsFragmentDirections.actionReportDetailsFragmentToMapFragment(report.getLat(), report.getLng());
-                Navigation.findNavController(getActivity(), R.id.home_nav_fragment).navigate(directions);
+            public void onClick(View v) {
+                MaterialButton button = (MaterialButton) v;
+                if (button.getText().equals(getString(R.string.start_job))) {
+                    //Todo start job and update job report along with location to server
+                    report.setComplaintStatus(getString(R.string.in_progress));
+                }else if(button.getText().equals(getString(R.string.complete_job))){
+                    report.setComplaintStatus(getString(R.string.closed));
+                }
+
+                updateServer();
             }
         });
+    }
+
+    private void updateServer() {
+        //Todo include server call
+        if (!reportsList.isEmpty()) {
+            for (Report report : reportsList) {
+                if (report.getComplaintId() == this.report.getComplaintId()) {
+                    report = this.report;
+                }
+            }
+            //TOdo update reports from server, now load from json
+            DataHandler.getInstance().addReportsToDb(reportsList);
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -144,6 +168,15 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
             // For zooming functionality
             CameraPosition cameraPosition = new CameraPosition.Builder().target(location).zoom(12).build();
             this.googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            this.googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    Bundle bundle = new Bundle();
+                    bundle.putDouble("lat", report.getLat());
+                    bundle.putDouble("lng", report.getLng());
+                    Navigation.findNavController(getActivity(), R.id.home_nav_fragment).navigate(R.id.map_fragment, bundle);
+                }
+            });
         } else {
             requestLocation(false);
         }

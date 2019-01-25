@@ -10,6 +10,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.ffm.R;
+import com.google.android.material.button.MaterialButton;
+
 import androidx.databinding.BindingAdapter;
 
 public class BindingAdapters {
@@ -18,6 +21,19 @@ public class BindingAdapters {
         view.setVisibility(isGone ? View.GONE : View.VISIBLE);
     }
 
+    @BindingAdapter("job_status")
+    public static void configureButton(MaterialButton button, String status){
+        if("Open".equals(status)){
+            button.setText(R.string.start_job);
+        }else if("InProgress".equals(status)){
+            button.setText(R.string.complete_job);
+        }
+        if("Open".equals(status) || "InProgress".equals(status)){
+            button.setVisibility(View.VISIBLE);
+        }else{
+            button.setVisibility(View.GONE);
+        }
+    }
     @BindingAdapter("image_big")
     public static void setImageBig(ImageView imageView, Bitmap bitmap) {
         if (bitmap == null) {

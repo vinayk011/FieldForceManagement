@@ -18,7 +18,7 @@
       "reportedBy": "Vinay",
       "locationAddress": "Hafeezpet, Hyderabad,India.",
       "reportedTime": 1527019224654,
-      "complaintStatus": "InProgress",
+      "complaintStatus": "Open",
       "lat": 17.448657,
       "lng": 78.363197
     },
@@ -29,7 +29,7 @@
       "reportedBy": "person3",
       "locationAddress": "Hitech city, Hyderabad, india.",
       "reportedTime": 1537019224654,
-      "complaintStatus": "Close",
+      "complaintStatus": "Open",
       "lat": 17.448657,
       "lng": 78.363197
     },

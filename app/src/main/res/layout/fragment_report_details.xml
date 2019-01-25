@@ -155,8 +155,8 @@
                     android:id="@+id/job_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_3sdp"
                     android:layout_alignTop="@+id/report_type"
+                    android:layout_marginLeft="@dimen/_3sdp"
                     android:layout_toEndOf="@+id/report_type"
                     android:text="@{report.description}"
                     android:textColor="@color/colorPrimaryTextDark"
@@ -182,14 +182,57 @@
                     android:textColor="@color/colorPrimaryTextDark"
                     android:textSize="@dimen/_10ssp" />
 
-                <com.google.android.gms.maps.MapView
-                    android:id="@+id/map_view"
+                <FrameLayout
+                    android:id="@+id/frame_map"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_100sdp"
-                    android:layout_below="@+id/job_type"
-                    android:apiKey="@string/google_api_key_android"
-                    android:clickable="true"
-                    tools:context="com.ffm.activity.HomeActivity" />
+                    android:layout_below="@+id/job_type">
+
+                    <com.google.android.gms.maps.MapView
+                        android:id="@+id/map_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:apiKey="@string/google_api_key_android"
+                        tools:context="com.ffm.activity.HomeActivity" />
+                </FrameLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_customer_call_response"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/frame_map"
+                    android:padding="10dp"
+                    android:visibility="@{report.complaintStatus.equals(@string/status_open) ? View.VISIBLE : View.GONE}">
+
+                    <TextView
+                        android:id="@+id/tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cal_response" />
+
+                    <RadioGroup
+                        android:id="@+id/rg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rb_coldfusion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="10dp"
+                            android:text="@string/responded" />
+
+                        <RadioButton
+                            android:id="@+id/rb_flex"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="10dp"
+                            android:text="@string/not_responded" />
+                    </RadioGroup>
+                </RelativeLayout>
 
                 <LinearLayout
                     android:id="@+id/layout_response"
@@ -266,19 +309,7 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/cancel"
-                        style="@style/button_2"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/_40sdp"
-                        android:layout_margin="@dimen/_2sdp"
-                        android:layout_weight="1"
-                        android:text="Decline"
-                        android:textAllCaps="false"
-                        app:cornerRadius="@dimen/_20sdp"
-                        app:rippleColor="@color/colorAccent" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/ok"
+                        android:id="@+id/update_status"
                         style="@style/button"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/_40sdp"
@@ -289,6 +320,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/colorPrimaryBg"
                         app:cornerRadius="@dimen/_20sdp"
+                        app:job_status="@{report.complaintStatus}"
                         app:rippleColor="@color/colorPrimaryDark" />
                 </LinearLayout>
             </RelativeLayout>
