@@ -53,6 +53,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
@@ -121,6 +123,13 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
             binding.setImage(null);
         });
         binding.setImage(PaperDB.getInstance().getImageBitmap());
+        binding.mapView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavDirections directions = ReportDetailsFragmentDirections.actionReportDetailsFragmentToMapFragment(report.getLat(), report.getLng());
+                Navigation.findNavController(getActivity(), R.id.home_nav_fragment).navigate(directions);
+            }
+        });
     }
 
     @SuppressLint("MissingPermission")
