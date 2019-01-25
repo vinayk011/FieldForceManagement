@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import com.ffm.R;
 import com.ffm.activity.HomeActivity;
@@ -134,10 +135,18 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
                 if (button.getText().equals(getString(R.string.start_job))) {
                     //Todo start job and update job report along with location to server
                     report.setComplaintStatus(getString(R.string.in_progress));
-                }else if(button.getText().equals(getString(R.string.complete_job))){
+                } else if (button.getText().equals(getString(R.string.complete_job))) {
                     report.setComplaintStatus(getString(R.string.closed));
                 }
 
+                updateServer();
+            }
+        });
+        binding.cbLocationReached.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //Todo update location to server
+                report.setReachedLocation(isChecked);
                 updateServer();
             }
         });

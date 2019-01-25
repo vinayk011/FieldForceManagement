@@ -50,4 +50,5 @@
     <string name="status_open">Open</string>
     <string name="in_progress">InProgress</string>
     <string name="closed">Closed</string>
+    <string name="reached_location">Reached customer location</string>
 </resources>

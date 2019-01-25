@@ -16,6 +16,7 @@ public class Report implements Comparable, Serializable {
     private String complaintStatus;
     private double lat;
     private double lng;
+    private boolean reachedLocation;
 
     @Ignore
     private boolean changed;
@@ -47,6 +48,14 @@ public class Report implements Comparable, Serializable {
         return 1;
     }
 
+
+    public boolean isReachedLocation() {
+        return reachedLocation;
+    }
+
+    public void setReachedLocation(boolean reachedLocation) {
+        this.reachedLocation = reachedLocation;
+    }
 
     public int getComplaintId() {
         return complaintId;

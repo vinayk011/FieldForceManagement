@@ -3,6 +3,8 @@ package com.ffm.util;
 import android.content.Context;
 
 import com.ffm.db.room.entity.Report;
+import com.ffm.preference.AppPrefConstants;
+import com.ffm.preference.AppPreference;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -32,7 +34,7 @@ public class GsonUtil {
             int i = 0;
             while (jSONArray != null && i < jSONArray.length()) {
                 JSONObject jSONObject = jSONArray.getJSONObject(i);
-                reportsList.add(new Report(jSONObject.getInt("complaintId"),jSONObject.getString("type"), jSONObject.getString("description"),
+                reportsList.add(new Report(jSONObject.getInt("complaintId"), jSONObject.getString("type"), jSONObject.getString("description"),
                         jSONObject.getString("reportedBy"), jSONObject.getString("locationAddress"), jSONObject.getLong("reportedTime"),
                         jSONObject.getString("complaintStatus"), jSONObject.getDouble("lat"), jSONObject.getDouble("lng")));
                 i++;
@@ -41,6 +43,7 @@ public class GsonUtil {
             Trace.e("Error parsing Reports.json");
         }
         Trace.i(" " + Arrays.toString(reportsList.toArray()));
+        AppPreference.getInstance().putBoolean(AppPrefConstants.JSON_LOADED, true);
         return reportsList;
     }
 

@@ -12,6 +12,10 @@ import com.ffm.db.room.entity.Report;
 import com.ffm.db.room.handlers.DataHandler;
 import com.ffm.db.room.viewmodels.ReportListViewModel;
 import com.ffm.listener.ListItemListener;
+import com.ffm.permission.AskForPermissionDialog;
+import com.ffm.permission.AskForPermissionListener;
+import com.ffm.permission.Permission;
+import com.ffm.permission.PermissionCallback;
 import com.ffm.preference.AppPrefConstants;
 import com.ffm.preference.AppPreference;
 import com.ffm.util.GsonUtil;
@@ -25,11 +29,13 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import pl.aprilapps.easyphotopicker.EasyImage;
 
 public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
     private ReportListViewModel reportsViewModel;
     private ReportsAdapter reportsAdapter;
     private ArrayList<Report> reportsList = new ArrayList<>();
+    private AskForPermissionDialog askForPermissionDialog;
 
     @Nullable
     @Override
@@ -92,7 +98,35 @@ public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
 
     private void updateReportsFromServer() {
         //TOdo update reports from server, now load from json
-        DataHandler.getInstance().addReportsToDb(GsonUtil.readReportsJSONFile(context));
+        if (!AppPreference.getInstance().getBoolean(AppPrefConstants.JSON_LOADED))
+            DataHandler.getInstance().addReportsToDb(GsonUtil.readReportsJSONFile(context));
         listenData();
+    }
+
+    private void requestLocation() {
+        requestPermission(Permission.FINE_LOCATION, new PermissionCallback() {
+            @Override
+            public void onPermissionResult(boolean granted, boolean neverAsk) {
+                if (granted) {
+                    //Todo
+
+                } else {
+                    if (askForPermissionDialog != null && askForPermissionDialog.isShowing()) {
+                        askForPermissionDialog.dismiss();
+                    }
+                    askForPermissionDialog = new AskForPermissionDialog(context, getString(R.string.location_permission_request_text), neverAsk, new AskForPermissionListener() {
+                        @Override
+                        public void ask() {
+                            requestLocation();
+                        }
+
+                        @Override
+                        public void deny() {
+                        }
+                    });
+                    askForPermissionDialog.show();
+                }
+            }
+        });
     }
 }
