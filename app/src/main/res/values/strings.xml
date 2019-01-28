@@ -51,4 +51,11 @@
     <string name="in_progress">InProgress</string>
     <string name="closed">Closed</string>
     <string name="reached_location">Reached customer location</string>
+    <string name="ok">Ok</string>
+    <string name="error">Error</string>
+    <string name="something_went_wrong_error">Something went wrong. Try again.</string>
+    <string name="server_connection_failed">You appear to be offline</string>
+    <string name="application_is_unable_to_connect_to_server">Application is unable to connect to server.</string>
+    <string name="please_check_your_internet_connection_and_retry"><![CDATA[<string name=\"please_check_your_internet_connection_and_retry\">Please check your internet connection and retry.</string>]]></string>
+    <string name="retry">Retry</string>
 </resources>

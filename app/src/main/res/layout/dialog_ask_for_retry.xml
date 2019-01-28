@@ -1,0 +1,87 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="show"
+            type="boolean" />
+
+        <variable
+            name="callback"
+            type="com.ffm.listener.ConfirmListener" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:minWidth="@dimen/_255sdp"
+        android:orientation="vertical"
+        android:padding="@dimen/_20sdp"
+        android:background="@color/colorPrimaryDark"
+        android:theme="@style/lightTheme">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/server_connection_failed"
+            android:textSize="@dimen/_15ssp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_10sdp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/application_is_unable_to_connect_to_server"
+            android:textSize="@dimen/_12ssp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/please_check_your_internet_connection_and_retry"
+            android:textSize="@dimen/_12ssp"
+            android:visibility="@{show ? View.VISIBLE : View.GONE}" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_20sdp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancel"
+                style="@style/button_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="@{() -> callback.cancel()}"
+                android:text="@string/cancel"
+                android:textAllCaps="false"
+                app:cornerRadius="@dimen/_20sdp"
+                app:rippleColor="@color/colorAccent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/ok"
+                style="@style/button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="@{() -> callback.ok()}"
+                android:text="@string/retry"
+                android:textAllCaps="false"
+                app:cornerRadius="@dimen/_20sdp"
+                app:rippleColor="@color/colorPrimary" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

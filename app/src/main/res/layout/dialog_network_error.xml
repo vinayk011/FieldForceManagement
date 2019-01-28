@@ -1,0 +1,65 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+
+        <import type="android.view.View" />
+
+        <import type="com.ffm.util.StringUtil" />
+
+        <variable
+            name="callback"
+            type="com.ffm.listener.ConfirmListener" />
+
+        <variable
+            name="networkError"
+            type="com.ffm.network.NetworkError" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:minWidth="@dimen/_255sdp"
+        android:orientation="vertical"
+        android:padding="@dimen/_20sdp"
+        android:background="@color/colorPrimaryDark"
+        android:theme="@style/lightTheme">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="3"
+            android:text="@{networkError.description}"
+            android:textSize="@dimen/_15ssp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:gravity="center"
+            android:maxLines="5"
+            android:text="@{networkError.recommendation}"
+            android:textSize="@dimen/_13ssp"
+            android:visibility="@{StringUtil.isEmpty(networkError.recommendation) ? View.GONE : View.VISIBLE}" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_20sdp" />
+
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/button"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_gravity="right"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:onClick="@{() -> callback.ok()}"
+            app:cornerRadius="@dimen/_20sdp"
+            app:rippleColor="@color/colorPrimary"
+            android:text="@string/ok" />
+
+    </LinearLayout>
+</layout>
