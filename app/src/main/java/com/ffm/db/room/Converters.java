@@ -1,5 +1,6 @@
 package com.ffm.db.room;
 
+import com.ffm.db.room.entity.Complaint;
 import com.ffm.db.room.entity.Report;
 import com.ffm.util.GsonUtil;
 import com.google.gson.reflect.TypeToken;
@@ -40,6 +41,20 @@ public class Converters {
 
     @TypeConverter
     public static String ReportListToString(List<Report> data) {
+        return GsonUtil.getGson().toJson(data);
+    }
+
+    @TypeConverter
+    public static List<Complaint> stringToComplaintList(String data) {
+        if (data == null) {
+            return Collections.emptyList();
+        }
+        return GsonUtil.getGson().fromJson(data, new TypeToken<List<Complaint>>() {
+        }.getType());
+    }
+
+    @TypeConverter
+    public static String ComplaintListToString(List<Complaint> data) {
         return GsonUtil.getGson().toJson(data);
     }
 

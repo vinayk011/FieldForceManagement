@@ -10,6 +10,7 @@ import android.os.Message;
 
 import com.ffm.FieldForceApplication;
 import com.ffm.db.room.AppDatabase;
+import com.ffm.db.room.entity.Complaint;
 import com.ffm.db.room.entity.Report;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 public class DataHandler {
     private static DataHandler dataHandler;
     private final int REPORTS = 101;
+    private final int COMPLAINTS = 103;
     private final int CLEAR = 105;
     private final int DEVICE_STATS = 102;
     private final String DATE = "date";
@@ -39,6 +41,9 @@ public class DataHandler {
                         if (REPORTS == msg.what) {
                             List<Report> reportList = (List<Report>) msg.obj;
                             new DevicesHandler().processReportsFromServer(reportList);
+                        } else if (COMPLAINTS == msg.what) {
+                            List<Complaint> complaints = (List<Complaint>) msg.obj;
+                            new ComplaintsHandler().processComplaintsFromServer(complaints);
                         }
                     }
                 }
@@ -85,6 +90,13 @@ public class DataHandler {
         Message message = new Message();
         message.what = REPORTS;
         message.obj = reportsList;
+        receiverThread.getmHandler().sendMessage(message);
+    }
+
+    public void addComplaintsToDb(List<Complaint> complaints) {
+        Message message = new Message();
+        message.what = COMPLAINTS;
+        message.obj = complaints;
         receiverThread.getmHandler().sendMessage(message);
     }
 

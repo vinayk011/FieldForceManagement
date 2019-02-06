@@ -8,6 +8,7 @@ public class AppPrefConstants {
     public static final String JSON_LOADED = "json_loaded";
     public static final String START_LOG = "start_log";
     public static final String USER_PHONE = "user_phone";
+    public static final String USER_ID = "user_id";
     public static final String USER_PASS = "user_pass";
 
     public static final String SYNC_FROM_SERVER = "sync_from_server";

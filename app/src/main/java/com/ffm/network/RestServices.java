@@ -15,22 +15,22 @@ import retrofit2.http.Query;
 
 public interface RestServices {
 
-    /*@POST("/cattle/login")
-    Call<Void> signIn(@Body SignInRequest signInRequest);
-
-    @POST("/cattle/login")
-    Call<Void> renew(@Body SignInRequest signInRequest);
-
-    @GET("/cattle/device/user")
-    Call<JsonArray> getDevices();
-
-    @GET("/cattle/device")
-    Call<JsonArray> getUnmappedDevices();
-
-
-    @POST("/cattle/device/user")
-    Call<Void> addDevices(@Body List<Device> devices);
-
-    @GET("/cattle/device/summary/{device}")
-    Call<JsonArray> getDeviceStats(@Path("device") String device, @Query("date") String date);*/
+//    @POST("/cattle/login")
+//    Call<Void> signIn(@Body SignInRequest signInRequest);
+//
+//    @POST("/cattle/login")
+//    Call<Void> renew(@Body SignInRequest signInRequest);
+//
+    @GET("GetAssignedComplaintsByEmployee")
+    Call<JsonArray> getComplaintsByEmployee(@Query("employeeID") String employeeID, @Query("statusType") String statusType );
+//
+//    @GET("/cattle/device")
+//    Call<JsonArray> getUnmappedDevices();
+//
+//
+//    @POST("/cattle/device/user")
+//    Call<Void> addDevices(@Body List<Device> devices);
+//
+//    @GET("/cattle/device/summary/{device}")
+//    Call<JsonArray> getDeviceStats(@Path("device") String device, @Query("date") String date);
 }

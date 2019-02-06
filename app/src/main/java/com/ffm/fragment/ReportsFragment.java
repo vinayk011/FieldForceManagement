@@ -19,6 +19,8 @@ import com.ffm.permission.PermissionCallback;
 import com.ffm.preference.AppPrefConstants;
 import com.ffm.preference.AppPreference;
 import com.ffm.util.GsonUtil;
+import com.ffm.util.Trace;
+import com.ffm.viewmodels.GetComplaintsModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +28,7 @@ import java.util.Collections;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
@@ -62,6 +65,7 @@ public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
     private void init() {
         setRecyclerView();
         AppPreference.getInstance().putString(AppPrefConstants.USER_PHONE, "8008526853");
+        AppPreference.getInstance().putString(AppPrefConstants.USER_ID, "EMP101");
     }
 
     private void setRecyclerView() {
@@ -101,6 +105,18 @@ public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
         if (!AppPreference.getInstance().getBoolean(AppPrefConstants.JSON_LOADED))
             DataHandler.getInstance().addReportsToDb(GsonUtil.readReportsJSONFile(context));
         listenData();
+
+        GetComplaintsModel complaintsModel = new GetComplaintsModel(1);
+        complaintsModel.run(context, "ALL").getData().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                if (integer == 1) {
+                    Trace.i("Failed");
+                }else {
+                    Trace.i("Success");
+                }
+            }
+        });
     }
 
     private void requestLocation() {

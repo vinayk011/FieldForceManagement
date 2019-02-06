@@ -4,7 +4,9 @@ package com.ffm.db.room;
 import android.content.Context;
 
 
+import com.ffm.db.room.dao.ComplaintsDao;
 import com.ffm.db.room.dao.ReportsDao;
+import com.ffm.db.room.entity.Complaint;
 import com.ffm.db.room.entity.ReportsInfo;
 
 import androidx.annotation.NonNull;
@@ -15,7 +17,7 @@ import androidx.room.TypeConverters;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {ReportsInfo.class}, version = 1)
+@Database(entities = {ReportsInfo.class, Complaint.class}, version = 1)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -34,5 +36,7 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
     public abstract ReportsDao reportsDao();
-    
+
+    public abstract ComplaintsDao complaintsDao();
+
 }
