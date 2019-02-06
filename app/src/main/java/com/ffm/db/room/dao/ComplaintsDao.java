@@ -21,7 +21,7 @@ public interface ComplaintsDao {
     List<Complaint> getComplaintsByUserID(String employeeId);
 
     @Query("SELECT * FROM Complaint WHERE employeeID =:employeeId ")
-    LiveData<Complaint> getComplaintsByIDAsLive(String employeeId);
+    LiveData<List<Complaint>> getComplaintsByIDAsLive(String employeeId);
 
     @Query("SELECT * FROM Complaint WHERE issueID =:issueId AND employeeID =:employeeId Limit 1")
     Complaint getComplaintsByIssueID(int issueId, String employeeId);

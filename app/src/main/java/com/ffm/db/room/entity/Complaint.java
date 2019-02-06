@@ -3,13 +3,14 @@ package com.ffm.db.room.entity;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class Complaint {
+public class Complaint implements Comparable, Serializable {
     @PrimaryKey
     @SerializedName("issueID")
     @Expose
@@ -49,6 +50,17 @@ public class Complaint {
     private List<String> customerHistory;*/
 
     private boolean changed;
+
+
+    @Override
+    public int compareTo(Object o) {
+        Complaint compare = (Complaint) o;
+
+        if (compare.getDescription().equals(this.description) && compare.getIssueType().equals(this.issueType)) {
+            return 0;
+        }
+        return 1;
+    }
 
     public Integer getIssueID() {
         return issueID;

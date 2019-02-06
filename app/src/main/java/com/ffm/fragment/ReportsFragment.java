@@ -6,11 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ffm.R;
-import com.ffm.adapters.ReportsAdapter;
+import com.ffm.adapters.ComplaintsAdapter;
 import com.ffm.databinding.FragmentReportsBinding;
-import com.ffm.db.room.entity.Report;
+import com.ffm.db.room.entity.Complaint;
 import com.ffm.db.room.handlers.DataHandler;
-import com.ffm.db.room.viewmodels.ReportListViewModel;
+import com.ffm.db.room.viewmodels.ComplaintsViewModel;
 import com.ffm.listener.ListItemListener;
 import com.ffm.permission.AskForPermissionDialog;
 import com.ffm.permission.AskForPermissionListener;
@@ -23,7 +23,6 @@ import com.ffm.util.Trace;
 import com.ffm.viewmodels.GetComplaintsModel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,12 +31,11 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
-import pl.aprilapps.easyphotopicker.EasyImage;
 
 public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
-    private ReportListViewModel reportsViewModel;
-    private ReportsAdapter reportsAdapter;
-    private ArrayList<Report> reportsList = new ArrayList<>();
+    private ComplaintsViewModel complaintsViewModel;
+    private ComplaintsAdapter complaintsAdapter;
+    private ArrayList<Complaint> complaints = new ArrayList<>();
     private AskForPermissionDialog askForPermissionDialog;
 
     @Nullable
@@ -52,13 +50,13 @@ public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
     }
 
     private void listenData() {
-        reportsViewModel = ViewModelProviders.of(this).get(ReportListViewModel.class);
-        reportsViewModel.getReports().observe(this, reportsInfo -> {
+        complaintsViewModel = ViewModelProviders.of(this).get(ComplaintsViewModel.class);
+        complaintsViewModel.getComplaints().observe(this, complaintsList -> {
             //Todo
-            reportsList = (ArrayList<Report>) reportsInfo.getReports();
-            binding.setHasReports(reportsList != null && !reportsList.isEmpty());
-            Collections.sort(reportsList, (d1, d2) -> d1.getType().compareTo(d2.getType()));
-            if (reportsAdapter != null) reportsAdapter.setReports(reportsList, false);
+            complaints = (ArrayList<Complaint>) complaintsList;
+            binding.setHasReports(complaints != null && !complaints.isEmpty());
+            //Collections.sort(complaints, (d1, d2) -> d1.getType().compareTo(d2.getType()));
+            if (complaintsAdapter != null) complaintsAdapter.setReports(complaints, false);
         });
     }
 
@@ -70,10 +68,10 @@ public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
 
     private void setRecyclerView() {
         try {
-            reportsAdapter = new ReportsAdapter(reportsList, context, new ListItemListener() {
+            complaintsAdapter = new ComplaintsAdapter(complaints, context, new ListItemListener() {
                 @Override
                 public void onItemClick(int position) {
-                    NavDirections directions = ReportsFragmentDirections.actionReportsFragmentToReportDetailsFragment(reportsList.get(position).getComplaintId(), getString(R.string.report_stats));
+                    NavDirections directions = ReportsFragmentDirections.actionReportsFragmentToReportDetailsFragment(complaints.get(position).getIssueID(), getString(R.string.report_stats));
                     Navigation.findNavController(getActivity(), R.id.home_nav_fragment).navigate(directions);
                 }
 
@@ -86,33 +84,29 @@ public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
             ex.printStackTrace();
         }
         binding.recyclerView.setHasFixedSize(true);
-        binding.recyclerView.setAdapter(reportsAdapter);
+        binding.recyclerView.setAdapter(complaintsAdapter);
     }
 
     public void resume() {
         attachObservers();
+        listenData();
         updateReportsFromServer();
     }
 
     private void attachObservers() {
-        if (reportsViewModel != null) {
-            reportsViewModel.run(this);
+        if (complaintsViewModel != null) {
+            complaintsViewModel.run(this);
         }
     }
 
     private void updateReportsFromServer() {
-        //TOdo update reports from server, now load from json
-        if (!AppPreference.getInstance().getBoolean(AppPrefConstants.JSON_LOADED))
-            DataHandler.getInstance().addReportsToDb(GsonUtil.readReportsJSONFile(context));
-        listenData();
-
         GetComplaintsModel complaintsModel = new GetComplaintsModel(1);
         complaintsModel.run(context, "ALL").getData().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
                 if (integer == 1) {
                     Trace.i("Failed");
-                }else {
+                } else {
                     Trace.i("Success");
                 }
             }

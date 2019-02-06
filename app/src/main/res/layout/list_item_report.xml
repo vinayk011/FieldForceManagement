@@ -7,8 +7,8 @@
         <import type="android.view.View" />
 
         <variable
-            name="reportInfo"
-            type="com.ffm.db.room.entity.Report" />
+            name="complaintInfo"
+            type="com.ffm.db.room.entity.Complaint" />
 
     </data>
 
@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/text_view_bg"
-                android:text="@{reportInfo.complaintStatus}"
+                android:text="@{complaintInfo.issueType}"
                 android:textColor="@color/colorPrimaryBg"
                 android:textSize="@dimen/_12ssp"
                 android:padding="@dimen/_3sdp"
@@ -42,7 +42,7 @@
                 android:id="@+id/report_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{reportInfo.description}"
+                android:text="@{complaintInfo.description}"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="@dimen/_14ssp"
                 android:layout_below="@+id/report_type"/>
@@ -65,7 +65,7 @@
                 android:layout_toRightOf="@+id/img_location"
                 android:layout_marginLeft="@dimen/_3sdp"
                 android:gravity="center_vertical"
-                android:text="@{reportInfo.locationAddress}"
+                android:text="@{complaintInfo.address}"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="@dimen/_12ssp" />
 
@@ -87,7 +87,7 @@
                 android:layout_toRightOf="@+id/img_time"
                 android:layout_marginLeft="@dimen/_3sdp"
                 android:gravity="center_vertical"
-                android:text="11:00 am - 12:30pm"
+                android:text="@{complaintInfo.complaintDate}"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="@dimen/_12ssp" />
             <!--<RelativeLayout
@@ -128,7 +128,7 @@
                         android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:text="@={reportInfo.report}"
+                        android:text="@={complaintInfo.report}"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="@dimen/_14ssp"
                         android:textStyle="bold" />
@@ -140,7 +140,7 @@
                         android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:text="@={reportInfo.name}"
+                        android:text="@={complaintInfo.name}"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="@dimen/_12ssp" />
                 </LinearLayout>

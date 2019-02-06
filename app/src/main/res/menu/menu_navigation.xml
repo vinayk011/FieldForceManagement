@@ -19,7 +19,7 @@
 
     <item
         android:id="@+id/reports_fragment"
-        android:title="@string/reports"
+        android:title="@string/complaints"
         />
    <!-- <item
         android:id="@+id/device_managementFragment"

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.ffm.R;
 import com.ffm.binding.ViewHolderBinding;
 import com.ffm.databinding.ListItemReportBinding;
+import com.ffm.db.room.entity.Complaint;
 import com.ffm.db.room.entity.Report;
 import com.ffm.listener.DeviceDiffUtilCallback;
 import com.ffm.listener.ListItemListener;
@@ -24,24 +25,24 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static com.ffm.constants.IntentConstants.REPORT_ID;
+import static com.ffm.constants.IntentConstants.ISSUE_ID;
 
 
-public class ReportsAdapter extends RecyclerView.Adapter {
+public class ComplaintsAdapter extends RecyclerView.Adapter {
 
-    private ArrayList<Report> reports = new ArrayList<>();
+    private ArrayList<Complaint> complaints = new ArrayList<>();
     private Context mContext;
     private ListItemListener listItemListener;
 
-    public ReportsAdapter(ArrayList<Report> reports, Context mContext, ListItemListener listItemListener) {
-        setReports(reports, false);
+    public ComplaintsAdapter(ArrayList<Complaint> complaints, Context mContext, ListItemListener listItemListener) {
+        setReports(complaints, false);
         this.mContext = mContext;
         this.listItemListener = listItemListener;
     }
 
-    public void setReports(ArrayList<Report> newReports, boolean callBackRequired) {
+    public void setReports(ArrayList<Complaint> newComplaints, boolean callBackRequired) {
         if (callBackRequired) {
-            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DeviceDiffUtilCallback(newReports, reports));
+            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DeviceDiffUtilCallback(newComplaints, complaints));
 
             diffResult.dispatchUpdatesTo(new ListUpdateCallback() {
                 @Override
@@ -70,11 +71,11 @@ public class ReportsAdapter extends RecyclerView.Adapter {
                     listItemListener.onChanged(true);
                 }
             });
-            reports.clear();
-            this.reports.addAll(newReports);
+            complaints.clear();
+            this.complaints.addAll(newComplaints);
         } else {
-            reports.clear();
-            this.reports.addAll(newReports);
+            complaints.clear();
+            this.complaints.addAll(newComplaints);
             notifyDataSetChanged();
         }
 
@@ -89,10 +90,10 @@ public class ReportsAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        final Report report = reports.get(holder.getAdapterPosition());
+        final Complaint complaint = complaints.get(holder.getAdapterPosition());
         final ListItemReportBinding itemDeviceBinding = (ListItemReportBinding) ((ViewHolderBinding) holder).binding;
         itemDeviceBinding.layoutHandler.setOnClickListener(v -> listItemListener.onItemClick(position));
-        itemDeviceBinding.setReportInfo(report);
+        itemDeviceBinding.setComplaintInfo(complaint);
         itemDeviceBinding.executePendingBindings();
 
     }
@@ -104,10 +105,10 @@ public class ReportsAdapter extends RecyclerView.Adapter {
         } else {
             Bundle o = (Bundle) payloads.get(0);
             for (String key : o.keySet()) {
-                if (key.equals(REPORT_ID)) {
+                if (key.equals(ISSUE_ID)) {
                     final ListItemReportBinding itemDeviceBinding = (ListItemReportBinding) ((ViewHolderBinding) holder).binding;
                     itemDeviceBinding.layoutHandler.setOnClickListener(v -> listItemListener.onItemClick(position));
-                    itemDeviceBinding.setReportInfo((Report) o.getSerializable(REPORT_ID));
+                    itemDeviceBinding.setComplaintInfo((Complaint) o.getSerializable(ISSUE_ID));
                     itemDeviceBinding.executePendingBindings();
                     //holder.mPrice.setTextColor(Color.GREEN);
                 }
@@ -122,16 +123,16 @@ public class ReportsAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return reports.size();
+        return complaints.size();
     }
 
     public void removeItem(int position) {
-        reports.remove(position);
+        complaints.remove(position);
         notifyItemRemoved(position);
     }
 
-    public void restoreItem(Report deletedModel, int deletedPosition) {
-        reports.add(deletedPosition, deletedModel);
+    public void restoreItem(Complaint deletedModel, int deletedPosition) {
+        complaints.add(deletedPosition, deletedModel);
         notifyItemInserted(deletedPosition);
     }
 }

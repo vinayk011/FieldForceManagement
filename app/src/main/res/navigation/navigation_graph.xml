@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/reports_fragment"
         android:name="com.ffm.fragment.ReportsFragment"
-        android:label="@string/reports"
+        android:label="@string/complaints"
         tools:layout="@layout/fragment_reports">
         <action
             android:id="@+id/action_reports_fragment_to_reportDetailsFragment"
@@ -25,7 +25,7 @@
         android:label="@string/report_details"
         tools:layout="@layout/fragment_report_details">
         <argument
-            android:name="complaintId"
+            android:name="issueId"
             app:argType="integer" />
         <argument
             android:name="summaryType"

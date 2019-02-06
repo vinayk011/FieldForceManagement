@@ -101,7 +101,7 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
 
     private void readArgs() {
         if (getArguments() != null) {
-            complaintId = ReportDetailsFragmentArgs.fromBundle(getArguments()).getComplaintId();
+            complaintId = ReportDetailsFragmentArgs.fromBundle(getArguments()).getIssueId();
             Trace.i("Complaint ID:" + complaintId);
             listenData();
         }
