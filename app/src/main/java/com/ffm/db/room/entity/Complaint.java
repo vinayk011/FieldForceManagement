@@ -18,7 +18,7 @@ public class Complaint implements Comparable, Serializable {
     @SerializedName("employeeID")
     @Expose
     private String employeeID;
-    @SerializedName("issueType")
+    @SerializedName("issueCategoryType")
     @Expose
     private String issueType;
     @SerializedName("description")

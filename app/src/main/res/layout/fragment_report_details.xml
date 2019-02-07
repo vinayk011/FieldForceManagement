@@ -61,7 +61,7 @@
                     android:layout_alignParentRight="true"
                     android:background="@drawable/text_view_bg"
                     android:padding="@dimen/_3sdp"
-                    android:text="@{complaint.complaintStatus}"
+                    android:text="@{complaint.issueType}"
                     android:textColor="@color/colorPrimaryBg"
                     android:textSize="@dimen/_12ssp" />
 
@@ -82,7 +82,7 @@
                             android:id="@+id/company_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Hyper TecLab"
+                            android:text="@{complaint.customerName}"
                             android:textColor="@color/colorPrimaryText"
                             android:textSize="@dimen/_16ssp"
                             android:textStyle="bold" />
@@ -95,7 +95,8 @@
                             android:gravity="center_vertical"
                             android:text="@{complaint.reportedBy}"
                             android:textColor="@color/colorPrimaryText"
-                            android:textSize="@dimen/_14ssp" />
+                            android:textSize="@dimen/_14ssp"
+                            android:visibility="invisible"/>
                     </RelativeLayout>
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -142,51 +143,49 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="@dimen/_5sdp">
-
-                <TextView
-                    android:id="@+id/report_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{complaint.type}"
-                    android:textColor="@color/colorPrimaryTextDark"
-                    android:textSize="@dimen/_12ssp" />
-
-                <TextView
-                    android:id="@+id/job_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/report_type"
-                    android:layout_marginLeft="@dimen/_3sdp"
-                    android:layout_toEndOf="@+id/report_type"
-                    android:text="@{complaint.description}"
-                    android:textColor="@color/colorPrimaryTextDark"
-                    android:textSize="@dimen/_10ssp" />
-
                 <TextView
                     android:id="@+id/job_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/report_type"
                     android:gravity="center_vertical"
-                    android:text="19 Jan, Saturday 8:00 Am - 10:00 AM"
+                    android:text="@{complaint.complaintDate}"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="@dimen/_12ssp" />
-
-                <TextView
-                    android:id="@+id/job_type"
+                <!--<TextView
+                    android:id="@+id/report_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@{complaint.type}"
                     android:layout_below="@+id/job_date"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    android:text="@{complaint.locationAddress}"
+                    android:textColor="@color/colorPrimaryTextDark"
+                    android:textSize="@dimen/_12ssp" />-->
+                <TextView
+                    android:id="@+id/job_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:layout_below="@+id/job_date"
+                    android:text="@{complaint.description}"
                     android:textColor="@color/colorPrimaryTextDark"
                     android:textSize="@dimen/_10ssp" />
+
+
+                <TextView
+                    android:id="@+id/job_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/job_description"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:text="@{complaint.address}"
+                    android:textColor="@color/colorPrimaryTextDark"
+                    android:textSize="@dimen/_10ssp"
+                    android:layout_marginBottom="@dimen/_5sdp"/>
 
                 <FrameLayout
                     android:id="@+id/frame_map"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_100sdp"
-                    android:layout_below="@+id/job_type">
+                    android:layout_below="@+id/job_address">
 
                     <com.google.android.gms.maps.MapView
                         android:id="@+id/map_view"
