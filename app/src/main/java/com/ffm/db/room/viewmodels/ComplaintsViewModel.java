@@ -34,7 +34,7 @@ public class ComplaintsViewModel extends AndroidViewModel {
     public void run(LifecycleOwner lifecycleOwner) {
         clear(lifecycleOwner);
         if (AppPreference.getInstance().getString(AppPrefConstants.USER_ID) != null) {
-            complaintsLiveData = appDatabase.complaintsDao().getComplaintsByIDAsLive(AppPreference.getInstance().getString(AppPrefConstants.USER_ID));
+            complaintsLiveData = appDatabase.complaintsDao().getComplaintsByEmpIDAsLive(AppPreference.getInstance().getString(AppPrefConstants.USER_ID));
             complaintsLiveData.observe(lifecycleOwner, complaintsObserver);
         }
 

@@ -17,8 +17,10 @@ import com.ffm.activity.HomeActivity;
 import com.ffm.databinding.FragmentReportDetailsBinding;
 import com.ffm.db.paper.PaperConstants;
 import com.ffm.db.paper.PaperDB;
+import com.ffm.db.room.entity.Complaint;
 import com.ffm.db.room.entity.Report;
 import com.ffm.db.room.handlers.DataHandler;
+import com.ffm.db.room.viewmodels.ComplaintModel;
 import com.ffm.db.room.viewmodels.ReportListViewModel;
 import com.ffm.dialog.CustomerResponseDialog;
 import com.ffm.dialog.ImageSelectDialog;
@@ -75,9 +77,8 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
     private GoogleMap googleMap;
     int complaintId;
 
-    private ReportListViewModel reportsViewModel;
-    private ArrayList<Report> reportsList = new ArrayList<>();
-    private Report report = new Report();
+    private ComplaintModel complaintModel;
+    private Complaint complaint = new Complaint();
 
 
     @Nullable
@@ -108,16 +109,12 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
     }
 
     private void listenData() {
-        reportsViewModel = ViewModelProviders.of(this).get(ReportListViewModel.class);
-        reportsViewModel.getReports().observe(this, reportsInfo -> {
-            //Todo
-            reportsList = (ArrayList<Report>) reportsInfo.getReports();
-            if (!reportsList.isEmpty() && complaintId < reportsList.size()) {
-                binding.setReport(reportsList.get(complaintId));
-                report = reportsList.get(complaintId);
-                Trace.i("Report:" + report.toString());
-                onMapReady(googleMap);
-            }
+        complaintModel = ViewModelProviders.of(this).get(ComplaintModel.class);
+        complaintModel.getComplaint().observe(this, complaint -> {
+            this.complaint = complaint;
+            binding.setComplaint(this.complaint);
+            Trace.i("Complaint:" + complaint.toString());
+            onMapReady(googleMap);
         });
     }
 
@@ -134,9 +131,9 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
                 MaterialButton button = (MaterialButton) v;
                 if (button.getText().equals(getString(R.string.start_job))) {
                     //Todo start job and update job report along with location to server
-                    report.setComplaintStatus(getString(R.string.in_progress));
+                    complaint.setIssueStatus(getString(R.string.in_progress));
                 } else if (button.getText().equals(getString(R.string.complete_job))) {
-                    report.setComplaintStatus(getString(R.string.closed));
+                    complaint.setIssueStatus(getString(R.string.closed));
                 }
 
                 updateServer();
@@ -145,8 +142,8 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
         binding.cbLocationReached.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //Todo update location to server
-                report.setReachedLocation(isChecked);
+                //Todo update location to server and update complaint object
+                //complaint.set(isChecked);
                 updateServer();
             }
         });

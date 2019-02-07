@@ -23,7 +23,7 @@ public class ComplaintsHandler {
                 String userId = AppPreference.getInstance().getString(AppPrefConstants.USER_ID);
                 if (userId != null && complaints != null) {
                     for(Complaint complaint : complaints){
-                        Complaint complaintFromDB = database.complaintsDao().getComplaintsByIssueID(complaint.getIssueID(), userId);
+                        Complaint complaintFromDB = database.complaintsDao().getComplaintsByIssueIDAndEmpId(complaint.getIssueID(), userId);
                         if(complaintFromDB == null){
                             complaint.setEmployeeID(userId);
                             database.complaintsDao().insertAll(complaint);

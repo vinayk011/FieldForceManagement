@@ -17,14 +17,21 @@ public interface ComplaintsDao {
     @Query("SELECT * FROM Complaint")
     List<Complaint> getAll();
 
-    @Query("SELECT * FROM Complaint WHERE employeeID =:employeeId ")
-    List<Complaint> getComplaintsByUserID(String employeeId);
+    @Query("SELECT * FROM Complaint WHERE issueID =:issueId ")
+    Complaint getComplaintsByID(int issueId);
+
+    @Query("SELECT * FROM Complaint WHERE issueID =:issueID ")
+    LiveData<Complaint> getComplaintsByIDAsLive(int issueID);
+
 
     @Query("SELECT * FROM Complaint WHERE employeeID =:employeeId ")
-    LiveData<List<Complaint>> getComplaintsByIDAsLive(String employeeId);
+    List<Complaint> getComplaintsByEmpID(String employeeId);
+
+    @Query("SELECT * FROM Complaint WHERE employeeID =:employeeId ")
+    LiveData<List<Complaint>> getComplaintsByEmpIDAsLive(String employeeId);
 
     @Query("SELECT * FROM Complaint WHERE issueID =:issueId AND employeeID =:employeeId Limit 1")
-    Complaint getComplaintsByIssueID(int issueId, String employeeId);
+    Complaint getComplaintsByIssueIDAndEmpId(int issueId, String employeeId);
 
     @Query("SELECT * FROM Complaint")
     LiveData<List<Complaint>> getAllAsLive();
