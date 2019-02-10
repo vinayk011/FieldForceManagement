@@ -32,6 +32,7 @@
     <string name="please_turn_on_permissions_at_setting_permission"><![CDATA[Please turn on permissions at\n[Setting] > [Permission]]]></string>
     <string name="request">Request</string>
     <string name="Camera_permission_request_text">Camera permission is required to take images.</string>
+    <string name="Call_permission_request_text">Call permission is required to make phone calls.</string>
     <string name="location_permission_request_text">Location permission is required to capture use geo location.</string>
     <string name="select_an_action">Select an Action</string>
     <string name="launch_camera">Launch Camera</string>

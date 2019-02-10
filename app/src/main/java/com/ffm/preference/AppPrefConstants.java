@@ -16,4 +16,5 @@ public class AppPrefConstants {
     public static final String KEY_PAIR_BIOMETRIC = "key_pair_biometric";
     public static final String KEY_REGISTER_BIOMETRIC = "key_register_biometric";
     public static final String JOB_PIC_UPDATE = "job_pic_update";
+    public static final String ISSUE_PIC_PATH = "issue_pic_path";
 }

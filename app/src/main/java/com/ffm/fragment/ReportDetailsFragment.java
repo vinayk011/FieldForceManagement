@@ -6,12 +6,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
+import com.ffm.FieldForceApplication;
 import com.ffm.R;
 import com.ffm.activity.HomeActivity;
 import com.ffm.databinding.FragmentReportDetailsBinding;
@@ -35,7 +37,11 @@ import com.ffm.permission.PermissionUtils;
 import com.ffm.preference.AppPrefConstants;
 import com.ffm.preference.AppPreference;
 import com.ffm.util.GsonUtil;
+import com.ffm.util.IssueStatus;
 import com.ffm.util.Trace;
+import com.ffm.viewmodels.GetCustomerLocationImageModel;
+import com.ffm.viewmodels.UpdateIssueDetailsModel;
+import com.ffm.viewmodels.request.ComplaintStatus;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -58,6 +64,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
@@ -78,7 +85,7 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
     int complaintId;
 
     private ComplaintModel complaintModel;
-    private Complaint complaint = new Complaint();
+    private Complaint complaint;
 
 
     @Nullable
@@ -114,6 +121,7 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
             this.complaint = complaint;
             binding.setComplaint(this.complaint);
             Trace.i("Complaint:" + complaint.toString());
+            getCustomerLocationImage();
             onMapReady(googleMap);
         });
     }
@@ -125,15 +133,26 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
             binding.setImage(null);
         });
         binding.setImage(PaperDB.getInstance().getImageBitmap());
+        binding.imgCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (complaint != null) {
+                    String phoneNumber = "tel:" + complaint.getCustomerMobile();
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    intent.setData(Uri.parse(phoneNumber));
+                    startActivity(intent);
+                }
+            }
+        });
         binding.updateStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MaterialButton button = (MaterialButton) v;
                 if (button.getText().equals(getString(R.string.start_job))) {
                     //Todo start job and update job report along with location to server
-                    complaint.setIssueStatus(getString(R.string.in_progress));
+                    complaint.setIssueStatus(IssueStatus.STARTED.getValue());
                 } else if (button.getText().equals(getString(R.string.complete_job))) {
-                    complaint.setIssueStatus(getString(R.string.closed));
+                    complaint.setIssueStatus(IssueStatus.COMPLETED.getValue());
                 }
 
                 updateServer();
@@ -144,21 +163,52 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 //Todo update location to server and update complaint object
                 //complaint.set(isChecked);
+                complaint.setReachedLocation(isChecked);
                 updateServer();
             }
         });
+        requestCall();
     }
 
     private void updateServer() {
         //Todo include server call
-        if (!reportsList.isEmpty()) {
-            for (Report report : reportsList) {
-                if (report.getComplaintId() == this.report.getComplaintId()) {
-                    report = this.report;
+        //TOdo update reports from server, now load from json
+        ComplaintStatus complaintStatus = new ComplaintStatus();
+        complaintStatus.setIssueId(complaint.getIssueID());
+        complaintStatus.setDescription(complaint.getDescription());
+        complaintStatus.setEmployeeId(complaint.getEmployeeID());
+        complaintStatus.setIssueStatus(complaint.getIssueStatus());
+        if (AppPreference.getInstance().getBoolean(AppPrefConstants.JOB_PIC_UPDATE)) {
+            complaintStatus.setImagePath(AppPreference.getInstance().getString(AppPrefConstants.ISSUE_PIC_PATH));
+        }
+        UpdateIssueDetailsModel issueDetailsModel = new UpdateIssueDetailsModel(1);
+        issueDetailsModel.run(context, complaintStatus).getData().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                if (integer == 1) {
+                    Trace.i("Failed");
+                    FieldForceApplication.getInstance().showToast("Issue status update failed.");
+                } else {
+                    Trace.i("Success");
+                    AppPreference.getInstance().remove(AppPrefConstants.JOB_PIC_UPDATE);
+                    DataHandler.getInstance().updateComplaintToDb(complaint);
                 }
             }
-            //TOdo update reports from server, now load from json
-            DataHandler.getInstance().addReportsToDb(reportsList);
+        });
+
+    }
+
+    private void getCustomerLocationImage() {
+        if (complaint != null && complaint.getImagePath() != null) {
+            GetCustomerLocationImageModel imageModel = new GetCustomerLocationImageModel(1);
+            imageModel.run(context, complaint.getImagePath()).getData().observe(this, new Observer<Integer>() {
+                @Override
+                public void onChanged(Integer integer) {
+                    if (integer == 0) {
+                        binding.setImage(PaperDB.getInstance().getImageBitmap());
+                    }
+                }
+            });
         }
     }
 
@@ -169,20 +219,22 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
             this.googleMap = googleMap;
             this.googleMap.setMyLocationEnabled(true);
             //To add marker
-            LatLng location = new LatLng(report.getLat(), report.getLng());
-            this.googleMap.addMarker(new MarkerOptions().position(location).title("Title").snippet("Marker Description"));
-            // For zooming functionality
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(location).zoom(12).build();
-            this.googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            this.googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                @Override
-                public void onMapClick(LatLng latLng) {
-                    Bundle bundle = new Bundle();
-                    bundle.putDouble("lat", report.getLat());
-                    bundle.putDouble("lng", report.getLng());
-                    Navigation.findNavController(getActivity(), R.id.home_nav_fragment).navigate(R.id.map_fragment, bundle);
-                }
-            });
+            if (complaint != null) {
+                LatLng location = new LatLng(complaint.getCustomerLocation().getLatitude(), complaint.getCustomerLocation().getLongitude());
+                this.googleMap.addMarker(new MarkerOptions().position(location).title("Title").snippet("Marker Description"));
+                // For zooming functionality
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(location).zoom(12).build();
+                this.googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                this.googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                    @Override
+                    public void onMapClick(LatLng latLng) {
+                        Bundle bundle = new Bundle();
+                        bundle.putDouble("lat", complaint.getCustomerLocation().getLatitude());
+                        bundle.putDouble("lng", complaint.getCustomerLocation().getLongitude());
+                        Navigation.findNavController(getActivity(), R.id.home_nav_fragment).navigate(R.id.map_fragment, bundle);
+                    }
+                });
+            }
         } else {
             requestLocation(false);
         }
@@ -192,7 +244,6 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
         if (getUserVisibleHint()) {
             hideKeyboard(context);
             if (AppPreference.getInstance().getBoolean(AppPrefConstants.JOB_PIC_UPDATE)) {
-                AppPreference.getInstance().remove(AppPrefConstants.JOB_PIC_UPDATE);
                 binding.setImage(PaperDB.getInstance().getImageBitmap());
             }
             binding.mapView.onResume();
@@ -217,8 +268,8 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
     }
 
     private void attachObservers() {
-        if (reportsViewModel != null) {
-            reportsViewModel.run(this);
+        if (complaintModel != null) {
+            complaintModel.run(this, complaintId);
         }
     }
 
@@ -266,6 +317,32 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
                         @Override
                         public void ask() {
                             requestCamera();
+                        }
+
+                        @Override
+                        public void deny() {
+                        }
+                    });
+                    askForPermissionDialog.show();
+                }
+            }
+        });
+    }
+
+    private void requestCall() {
+        requestPermission(Permission.CALL_PHONE, new PermissionCallback() {
+            @Override
+            public void onPermissionResult(boolean granted, boolean neverAsk) {
+                if (granted) {
+                    //
+                } else {
+                    if (askForPermissionDialog != null && askForPermissionDialog.isShowing()) {
+                        askForPermissionDialog.dismiss();
+                    }
+                    askForPermissionDialog = new AskForPermissionDialog(context, getString(R.string.Call_permission_request_text), neverAsk, new AskForPermissionListener() {
+                        @Override
+                        public void ask() {
+                            requestCall();
                         }
 
                         @Override

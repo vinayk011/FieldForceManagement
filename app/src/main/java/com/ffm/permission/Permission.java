@@ -9,7 +9,8 @@ public enum Permission {
     CAMERA(Manifest.permission.CAMERA),
     FINE_LOCATION(Manifest.permission.ACCESS_FINE_LOCATION),
     WRITE_STORAGE(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-    COARSE_LOCATION(Manifest.permission.ACCESS_COARSE_LOCATION);
+    COARSE_LOCATION(Manifest.permission.ACCESS_COARSE_LOCATION),
+    CALL_PHONE(Manifest.permission.CALL_PHONE);
 
     String permission;
 

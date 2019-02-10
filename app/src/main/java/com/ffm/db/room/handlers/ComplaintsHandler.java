@@ -40,5 +40,28 @@ public class ComplaintsHandler {
 
     }
 
+    void updateComplaintToDb(Complaint complaint) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                AppDatabase database = AppDatabase.getDatabase(FieldForceApplication.getInstance());
+                String userId = AppPreference.getInstance().getString(AppPrefConstants.USER_ID);
+                if (complaint != null && userId != null) {
+                        Complaint complaintFromDB = database.complaintsDao().getComplaintsByID(complaint.getIssueID());
+                        if(complaintFromDB == null){
+                            complaint.setEmployeeID(userId);
+                            database.complaintsDao().insertAll(complaint);
+                        }else{
+                            complaintFromDB = complaint;
+                            complaintFromDB.setEmployeeID(userId);
+                            database.complaintsDao().update(complaintFromDB);
+                        }
+
+                }
+                return null;
+            }
+        }.execute();
+
+    }
 
 }

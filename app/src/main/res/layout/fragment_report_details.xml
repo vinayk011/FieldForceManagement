@@ -28,21 +28,6 @@
         android:orientation="vertical"
         android:padding="@dimen/_10sdp">
 
-        <!--<androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="@dimen/_2sdp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/text_view_bg"
-                android:padding="@dimen/_5sdp"
-                android:text="Customer"
-                android:textColor="@color/colorPrimaryBg"
-                android:textSize="@dimen/_14ssp" />
-        </androidx.cardview.widget.CardView>-->
-
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -93,10 +78,9 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/company_name"
                             android:gravity="center_vertical"
-                            android:text="@{complaint.reportedBy}"
                             android:textColor="@color/colorPrimaryText"
                             android:textSize="@dimen/_14ssp"
-                            android:visibility="invisible"/>
+                            android:visibility="invisible" />
                     </RelativeLayout>
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -116,23 +100,6 @@
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 
-        <!--  <androidx.cardview.widget.CardView
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="@dimen/_4sdp"
-              android:elevation="@dimen/_2sdp">
-
-              <TextView
-                  android:id="@+id/job_header"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:background="@drawable/text_view_bg"
-                  android:padding="@dimen/_5sdp"
-                  android:text="Job Details"
-                  android:textColor="@color/colorPrimaryBg"
-                  android:textSize="@dimen/_14ssp" />
-          </androidx.cardview.widget.CardView>-->
-
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -143,6 +110,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="@dimen/_5sdp">
+
                 <TextView
                     android:id="@+id/job_date"
                     android:layout_width="match_parent"
@@ -163,8 +131,8 @@
                     android:id="@+id/job_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_3sdp"
                     android:layout_below="@+id/job_date"
+                    android:layout_marginLeft="@dimen/_3sdp"
                     android:text="@{complaint.description}"
                     android:textColor="@color/colorPrimaryTextDark"
                     android:textSize="@dimen/_10ssp" />
@@ -176,10 +144,10 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/job_description"
                     android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
                     android:text="@{complaint.address}"
                     android:textColor="@color/colorPrimaryTextDark"
-                    android:textSize="@dimen/_10ssp"
-                    android:layout_marginBottom="@dimen/_5sdp"/>
+                    android:textSize="@dimen/_10ssp" />
 
                 <FrameLayout
                     android:id="@+id/frame_map"
@@ -201,7 +169,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/frame_map"
                     android:padding="10dp"
-                    android:visibility="@{complaint.complaintStatus.equals(@string/status_open) ? View.VISIBLE : View.GONE}">
+                    app:layout_job_status="@{complaint.issueStatus}">
 
                     <TextView
                         android:id="@+id/tv"
@@ -239,7 +207,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/frame_map"
                     android:padding="3dp"
-                    android:visibility="@{complaint.complaintStatus.equals(@string/in_progress) ? View.VISIBLE : View.GONE}">
+                    app:layout_job_status="@{complaint.issueStatus}">
 
                     <CheckBox
                         android:id="@+id/cb_location_reached"
@@ -310,7 +278,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/colorPrimaryBg"
                         app:cornerRadius="@dimen/_20sdp"
-                        app:job_status="@{complaint.complaintStatus}"
+                        app:job_status="@{complaint.issueStatus}"
                         app:rippleColor="@color/colorPrimaryDark" />
                 </LinearLayout>
             </RelativeLayout>

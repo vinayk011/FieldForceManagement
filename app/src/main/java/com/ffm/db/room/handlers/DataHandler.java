@@ -19,9 +19,9 @@ import java.util.List;
 public class DataHandler {
     private static DataHandler dataHandler;
     private final int REPORTS = 101;
-    private final int COMPLAINTS = 103;
-    private final int CLEAR = 105;
-    private final int DEVICE_STATS = 102;
+    private final int COMPLAINTS = 102;
+    private final int UPDATE_COMPLAINT = 103;
+    private final int CLEAR = 104;
     private final String DATE = "date";
     private ReceiverThread receiverThread;
 
@@ -44,6 +44,9 @@ public class DataHandler {
                         } else if (COMPLAINTS == msg.what) {
                             List<Complaint> complaints = (List<Complaint>) msg.obj;
                             new ComplaintsHandler().processComplaintsFromServer(complaints);
+                        } else if (UPDATE_COMPLAINT == msg.what) {
+                            Complaint complaint = (Complaint) msg.obj;
+                            new ComplaintsHandler().updateComplaintToDb(complaint);
                         }
                     }
                 }
@@ -97,6 +100,13 @@ public class DataHandler {
         Message message = new Message();
         message.what = COMPLAINTS;
         message.obj = complaints;
+        receiverThread.getmHandler().sendMessage(message);
+    }
+
+    public void updateComplaintToDb(Complaint complaint) {
+        Message message = new Message();
+        message.what = UPDATE_COMPLAINT;
+        message.obj = complaint;
         receiverThread.getmHandler().sendMessage(message);
     }
 

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.ffm.R;
+import com.ffm.util.IssueStatus;
 import com.google.android.material.button.MaterialButton;
 
 import androidx.databinding.BindingAdapter;
@@ -22,18 +23,53 @@ public class BindingAdapters {
     }
 
     @BindingAdapter("job_status")
-    public static void configureButton(MaterialButton button, String status){
-        if("Open".equals(status)){
-            button.setText(R.string.start_job);
-        }else if("InProgress".equals(status)){
-            button.setText(R.string.complete_job);
-        }
-        if("Open".equals(status) || "InProgress".equals(status)){
-            button.setVisibility(View.VISIBLE);
-        }else{
-            button.setVisibility(View.GONE);
+    public static void configureButton(MaterialButton button, String status) {
+        button.setVisibility(View.VISIBLE);
+        switch (IssueStatus.getIssueStatus(status)) {
+            case NEW:
+            case ACCEPTED:
+            case ASSIGNED:
+                button.setText(R.string.start_job);
+                break;
+            case STARTED:
+            case RE_OPENED:
+            case PAUSED:
+                button.setText(R.string.complete_job);
+                break;
+            case COMPLETED:
+                button.setVisibility(View.GONE);
+                break;
         }
     }
+
+    @BindingAdapter("layout_job_status")
+    public static void configureIssueDetails(View view, String status) {
+        int id = view.getId();
+        switch (IssueStatus.getIssueStatus(status)) {
+            case NEW:
+            case ACCEPTED:
+            case ASSIGNED:
+            case RE_OPENED:
+                if (R.id.rl_customer_call_response == id) {
+                    view.setVisibility(View.VISIBLE);
+                } else {
+                    view.setVisibility(View.GONE);
+                }
+                break;
+            case STARTED:
+            case PAUSED:
+                if (R.id.rl_customer_call_response == id) {
+                    view.setVisibility(View.GONE);
+                } else {
+                    view.setVisibility(View.VISIBLE);
+                }
+                break;
+            case COMPLETED:
+                view.setVisibility(View.GONE);
+                break;
+        }
+    }
+
     @BindingAdapter("image_big")
     public static void setImageBig(ImageView imageView, Bitmap bitmap) {
         if (bitmap == null) {

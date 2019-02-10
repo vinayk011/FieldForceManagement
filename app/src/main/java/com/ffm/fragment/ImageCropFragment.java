@@ -149,6 +149,7 @@ public class ImageCropFragment extends BaseFragment<FragmentImageCropBinding> {
                 //Todo handle image upload to server
                 PaperDB.getInstance().saveImageBitmap(bitmap);
                 AppPreference.getInstance().putBoolean(AppPrefConstants.JOB_PIC_UPDATE, true);
+                AppPreference.getInstance().putString(AppPrefConstants.ISSUE_PIC_PATH,thumbPath.getAbsolutePath());
                 snackBarView(getString(R.string.picture_uploaded));
                 ((HomeActivity) context).onBackPressed();
             } else {

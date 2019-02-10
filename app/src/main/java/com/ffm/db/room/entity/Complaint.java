@@ -24,6 +24,9 @@ public class Complaint implements Comparable, Serializable {
     @SerializedName("description")
     @Expose
     private String description;
+    @SerializedName("imagePath")
+    @Expose
+    private String imagePath;
     @SerializedName("customerName")
     @Expose
     private String customerName;
@@ -38,13 +41,26 @@ public class Complaint implements Comparable, Serializable {
     private String severity;
     @SerializedName("customerLocation")
     @Expose
-    private String customerLocation;
+    private LocationInfo customerLocation;
+    @SerializedName("employeelocation")
+    @Expose
+    private LocationInfo employeeLocation;
     @SerializedName("issueStatus")
     @Expose
     private String issueStatus;
     @SerializedName("address")
     @Expose
     private String address;
+
+    @SerializedName("reachedLocation")
+    @Expose
+    private boolean reachedLocation;
+
+    @SerializedName("customerHistory")
+    @Expose
+    private List<CustomerHistory> customerHistory;
+
+
     /*@SerializedName("customerHistory")
     @Expose
     private List<String> customerHistory;*/
@@ -126,12 +142,20 @@ public class Complaint implements Comparable, Serializable {
         this.severity = severity;
     }
 
-    public String getCustomerLocation() {
+    public LocationInfo getCustomerLocation() {
         return customerLocation;
     }
 
-    public void setCustomerLocation(String customerLocation) {
+    public void setCustomerLocation(LocationInfo customerLocation) {
         this.customerLocation = customerLocation;
+    }
+
+    public LocationInfo getEmployeeLocation() {
+        return employeeLocation;
+    }
+
+    public void setEmployeeLocation(LocationInfo customerLocation) {
+        this.employeeLocation = customerLocation;
     }
 
     public String getIssueStatus() {
@@ -157,6 +181,30 @@ public class Complaint implements Comparable, Serializable {
     public void setCustomerHistory(List<String> customerHistory) {
         this.customerHistory = customerHistory;
     }*/
+
+    public boolean isReachedLocation() {
+        return reachedLocation;
+    }
+
+    public void setReachedLocation(boolean reachedLocation) {
+        this.reachedLocation = reachedLocation;
+    }
+
+    public List<CustomerHistory> getCustomerHistory() {
+        return customerHistory;
+    }
+
+    public void setCustomerHistory(List<CustomerHistory> customerHistory) {
+        this.customerHistory = customerHistory;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 
     public boolean isChanged() {
         return changed;
