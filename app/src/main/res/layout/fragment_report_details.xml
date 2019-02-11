@@ -223,8 +223,7 @@
                         android:layout_height="@dimen/_75sdp"
                         android:layout_margin="@dimen/_2sdp"
                         android:layout_toRightOf="@id/cb_location_reached"
-                        android:padding="@dimen/_5sdp"
-                        android:visibility="@{complaint.reachedLocation ? View.VISIBLE : View.GONE}">
+                        android:padding="@dimen/_5sdp">
 
                         <ImageView
                             android:id="@+id/upload_image"

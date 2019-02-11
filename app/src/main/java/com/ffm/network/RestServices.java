@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.List;
 
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -33,10 +34,15 @@ public interface RestServices {
 
     @Multipart
     @POST("resources/fieldforce/UpdateEmployeeStatus")
-    Call<Void> updateIssueDetails(@Part("complaintStatus") ComplaintStatus complaintStatus, @Part MultipartBody.Part file);
+    Call<JSONObject> updateIssueDetails(@Part("issueID") RequestBody issueID,
+                                  @Part("employeeID") RequestBody employeeID,
+                                  @Part("issueStatus") RequestBody issueStatus,
+                                  @Part("latitude") RequestBody latitude,
+                                  @Part("longitude") RequestBody longitude,
+                                  @Part ("file") RequestBody file);
 
     @GET("{path}")
-    Call<ResponseBody> getImage(@Path(value="path", encoded=true) String path);
+    Call<ResponseBody> getImage(@Path(value = "path", encoded = true) String path);
 //
 //    @GET("/cattle/device")
 //    Call<JsonArray> getUnmappedDevices();

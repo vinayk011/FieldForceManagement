@@ -1,5 +1,7 @@
 package com.ffm.viewmodels.request;
 
+import com.ffm.db.room.entity.LocationInfo;
+
 import java.io.File;
 
 public class ComplaintStatus {
@@ -9,6 +11,7 @@ public class ComplaintStatus {
     private String description;
     private String issueStatus;
     private String imagePath;
+    private LocationInfo locationInfo;
 
 
     public int getIssueId() {
@@ -49,5 +52,13 @@ public class ComplaintStatus {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public LocationInfo getLocationInfo() {
+        return locationInfo;
+    }
+
+    public void setLocationInfo(LocationInfo locationInfo) {
+        this.locationInfo = locationInfo;
     }
 }

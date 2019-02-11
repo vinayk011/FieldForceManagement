@@ -20,6 +20,7 @@ import com.ffm.databinding.FragmentReportDetailsBinding;
 import com.ffm.db.paper.PaperConstants;
 import com.ffm.db.paper.PaperDB;
 import com.ffm.db.room.entity.Complaint;
+import com.ffm.db.room.entity.LocationInfo;
 import com.ffm.db.room.entity.Report;
 import com.ffm.db.room.handlers.DataHandler;
 import com.ffm.db.room.viewmodels.ComplaintModel;
@@ -83,7 +84,7 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
     private final static int UPLOAD_REQUEST = 23;
     private GoogleMap googleMap;
     int complaintId;
-
+    private FusedLocationProviderClient mFusedLocationClient;
     private ComplaintModel complaintModel;
     private Complaint complaint;
 
@@ -103,6 +104,7 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
             e.printStackTrace();
         }
         binding.mapView.getMapAsync(this);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
         init();
         return binding.getRoot();
     }
@@ -147,6 +149,7 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
         binding.updateStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                updateLastLocation();
                 MaterialButton button = (MaterialButton) v;
                 if (button.getText().equals(getString(R.string.start_job))) {
                     //Todo start job and update job report along with location to server
@@ -154,7 +157,9 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
                 } else if (button.getText().equals(getString(R.string.complete_job))) {
                     complaint.setIssueStatus(IssueStatus.COMPLETED.getValue());
                 }
-
+                if(lastLocation != null){
+                    complaint.setEmployeeLocation(new LocationInfo(lastLocation.getLatitude(), lastLocation.getLongitude()));
+                }
                 updateServer();
             }
         });
@@ -178,6 +183,7 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
         complaintStatus.setDescription(complaint.getDescription());
         complaintStatus.setEmployeeId(complaint.getEmployeeID());
         complaintStatus.setIssueStatus(complaint.getIssueStatus());
+        complaintStatus.setLocationInfo(complaint.getEmployeeLocation());
         if (AppPreference.getInstance().getBoolean(AppPrefConstants.JOB_PIC_UPDATE)) {
             complaintStatus.setImagePath(AppPreference.getInstance().getString(AppPrefConstants.ISSUE_PIC_PATH));
         }
@@ -215,7 +221,7 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        if (PermissionUtils.isGranted(context, Permission.FINE_LOCATION)) {
+        if (PermissionUtils.isGranted(context, Permission.FINE_LOCATION) && googleMap != null) {
             this.googleMap = googleMap;
             this.googleMap.setMyLocationEnabled(true);
             //To add marker
@@ -388,23 +394,27 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
 
     private void startApiClient() {
         try {
-            FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            mFusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(activity, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            if (location != null) {
-                                lastLocation = location;
-                            }
-                        }
-                    });
+            updateLastLocation();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void updateLastLocation() {
+        mFusedLocationClient.getLastLocation()
+                .addOnSuccessListener(activity, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            lastLocation = location;
+                        }
+                    }
+                });
     }
 
     @Override

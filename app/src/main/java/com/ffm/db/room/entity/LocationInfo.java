@@ -12,6 +12,15 @@ public class LocationInfo {
     @Expose
     private Double longitude;
 
+
+    public LocationInfo() {
+    }
+
+    public LocationInfo(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public Double getLatitude() {
         return latitude;
     }

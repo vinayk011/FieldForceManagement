@@ -63,6 +63,7 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> implements B
         NavigationUI.setupWithNavController(binding.navigationView, navController);
 
         updateNavHeader();
+        verifyBiometric();
 
     }
 
@@ -107,7 +108,7 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> implements B
 
 
     public void resume() {
-        verifyBiometric();
+
     }
 
     private void verifyBiometric() {
@@ -237,7 +238,8 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> implements B
     public void onAuthenticationCancelled() {
         showAlert(getString(R.string.alert), getString(R.string.biometric_cancelled),
                 false, () -> {
-                    finish();
+                    //finish();
+                    verifyBiometric();
                 });
     }
 
@@ -256,7 +258,8 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> implements B
         //FieldForceApplication.getInstance().showToast(errString.toString());
         showAlert(getString(R.string.alert), errString.toString(),
                 false, () -> {
-                    finish();
+                    //finish();
+                    verifyBiometric();
                 });
     }
 }

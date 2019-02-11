@@ -8,6 +8,7 @@ import com.ffm.db.paper.PaperDB;
 import com.ffm.network.NetworkError;
 import com.ffm.network.NetworkListener;
 import com.ffm.network.RestCall;
+import com.ffm.util.Trace;
 
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,8 @@ public class GetCustomerLocationImageModel extends BaseAndroidViewModel<Integer,
 
     @Override
     public GetCustomerLocationImageModel run(final Context context, String imagePath) {
+        imagePath = imagePath.replaceFirst("/", "");
+        Trace.i("image path" + imagePath);
         restCall = new RestCall<>(context, true);
         restCall.execute(restServices.getImage(imagePath), 3,
                 new NetworkListener<ResponseBody>() {

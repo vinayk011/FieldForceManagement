@@ -22,22 +22,31 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class UpdateIssueDetailsModel extends BaseAndroidViewModel<Integer, Void, ComplaintStatus, UpdateIssueDetailsModel> {
+public class UpdateIssueDetailsModel extends BaseAndroidViewModel<Integer, JSONObject, ComplaintStatus, UpdateIssueDetailsModel> {
     public UpdateIssueDetailsModel(int errorCode) {
         super(false, errorCode);
     }
 
     @Override
     public UpdateIssueDetailsModel run(Context context, ComplaintStatus complaintStatus) {
-        MultipartBody.Part part = null;
+//        MultipartBody.Part part = null;
+        RequestBody file= null;
         if (complaintStatus.getImagePath() != null) {
-            RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), new File(complaintStatus.getImagePath()));
-            part = MultipartBody.Part.createFormData("uploadedFile", complaintStatus.getImagePath(), requestBody);
+            file = RequestBody.create(MediaType.parse("image/*"), new File(complaintStatus.getImagePath()));
+//            part = MultipartBody.Part.createFormData("uploadedFile", complaintStatus.getImagePath(), requestBody);
         }
+        MediaType text = MediaType.parse("text/plain");
+        RequestBody issueID = RequestBody.create(text, String.valueOf(complaintStatus.getIssueId()));
+        RequestBody employeeID = RequestBody.create(text, complaintStatus.getEmployeeId());
+        RequestBody issueStatus = RequestBody.create(text, complaintStatus.getIssueStatus());
+        RequestBody latitude = RequestBody.create(text, String.valueOf(complaintStatus.getLocationInfo().getLatitude()));
+        RequestBody longitude = RequestBody.create(text, String.valueOf(complaintStatus.getLocationInfo().getLongitude()));
+        //RequestBody file = RequestBody.create(MediaType.parse("image/*"), new File(complaintStatus.getImagePath()));
         restCall = new RestCall<>(context, true);
-        restCall.execute(restServices.updateIssueDetails(complaintStatus, part), 2, new NetworkListener<Void>() {
+        restCall.execute(restServices.updateIssueDetails(issueID, employeeID, issueStatus, latitude, longitude, file), 2, new NetworkListener<JSONObject>() {
             @Override
-            public void success(Void response) {
+            public void success(JSONObject response) {
+                Trace.i("Response:" + response);
                 data.postValue(0);
             }
 
