@@ -21,11 +21,11 @@
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
             android:layout_margin="@dimen/_10sdp"
+            android:clipToPadding="false"
             app:isGone="@{!hasReports}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/list_item_report"/>
+            tools:listitem="@layout/list_item_report" />
 
         <TextView
             android:id="@+id/empty_garden"
@@ -35,7 +35,7 @@
             android:text="@string/reports_empty"
             android:textColor="@color/colorPrimaryText"
             android:textSize="24sp"
-            app:isGone="@{hasReports}"/>
+            app:isGone="@{hasReports}" />
 
     </FrameLayout>
 

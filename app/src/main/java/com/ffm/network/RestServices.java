@@ -11,9 +11,11 @@ import java.util.List;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import okhttp3.internal.http.RetryAndFollowUpInterceptor;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -34,7 +36,7 @@ public interface RestServices {
 
     @Multipart
     @POST("resources/fieldforce/UpdateEmployeeStatus")
-    Call<JSONObject> updateIssueDetails(@Part("issueID") RequestBody issueID,
+    Call<Void> updateIssueDetails(@Part("issueID") RequestBody issueID,
                                   @Part("employeeID") RequestBody employeeID,
                                   @Part("issueStatus") RequestBody issueStatus,
                                   @Part("latitude") RequestBody latitude,

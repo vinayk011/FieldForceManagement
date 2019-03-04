@@ -157,7 +157,7 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
                 } else if (button.getText().equals(getString(R.string.complete_job))) {
                     complaint.setIssueStatus(IssueStatus.COMPLETED.getValue());
                 }
-                if(lastLocation != null){
+                if (lastLocation != null) {
                     complaint.setEmployeeLocation(new LocationInfo(lastLocation.getLatitude(), lastLocation.getLongitude()));
                 }
                 updateServer();
@@ -197,6 +197,7 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
                 } else {
                     Trace.i("Success");
                     AppPreference.getInstance().remove(AppPrefConstants.JOB_PIC_UPDATE);
+                    binding.setComplaint(complaint);
                     DataHandler.getInstance().updateComplaintToDb(complaint);
                 }
             }

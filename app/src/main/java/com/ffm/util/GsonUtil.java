@@ -27,24 +27,25 @@ public class GsonUtil {
         return gson;
     }
 
-    public static List<Report> readReportsJSONFile(Context context) {
+    public static String readReportsJSONFile(Context context) {
         List<Report> reportsList = new ArrayList<>();
         try {
             JSONArray jSONArray = new JSONObject(loadJSONFromAsset(context)).getJSONArray("reports");
-            int i = 0;
+            return jSONArray.toString();
+           /* int i = 0;
             while (jSONArray != null && i < jSONArray.length()) {
                 JSONObject jSONObject = jSONArray.getJSONObject(i);
                 reportsList.add(new Report(jSONObject.getInt("complaintId"), jSONObject.getString("type"), jSONObject.getString("description"),
                         jSONObject.getString("reportedBy"), jSONObject.getString("locationAddress"), jSONObject.getLong("reportedTime"),
                         jSONObject.getString("complaintStatus"), jSONObject.getDouble("lat"), jSONObject.getDouble("lng")));
                 i++;
-            }
+            }*/
         } catch (Exception e) {
             Trace.e("Error parsing Reports.json");
         }
-        Trace.i(" " + Arrays.toString(reportsList.toArray()));
-        AppPreference.getInstance().putBoolean(AppPrefConstants.JSON_LOADED, true);
-        return reportsList;
+//        Trace.i(" " + Arrays.toString(reportsList.toArray()));
+//        AppPreference.getInstance().putBoolean(AppPrefConstants.JSON_LOADED, true);
+        return null;
     }
 
     public static String loadJSONFromAsset(Context context) {

@@ -1,48 +1,68 @@
 {
-  "reports": [
-    {
-      "complaintId":0,
-      "type": "Installation",
-      "description": "New Installation",
-      "reportedBy": "Person1",
-      "locationAddress": "Bengaluru,Karnataka,India.",
-      "reportedTime": 1547029224654,
-      "complaintStatus": "Open",
-      "lat": 12.969049,
-      "lng": 77.601895
+  "reports": [{
+    "issueID": 6,
+    "description": "Wifi is ON, but not able to access internet",
+    "customerName": "Vinay",
+    "customerMobile": "9014507800",
+    "complaintDate": "2019-02-06 21:02:22",
+    "severity": "Minor",
+    "customerLocation": {
+      "latitude": "17.3688",
+      "longitude": "78.5247"
     },
-    {
-      "complaintId":1,
-      "type": "Bank Verification",
-      "description": "Personal Loan",
-      "reportedBy": "Vinay",
-      "locationAddress": "Hafeezpet, Hyderabad,India.",
-      "reportedTime": 1527019224654,
-      "complaintStatus": "Open",
-      "lat": 17.448657,
-      "lng": 78.363197
+    "issueStatus": "STARTED",
+    "issueCategoryType": "replacement",
+    "employeelocation": {
+      "latitude": "17.4375",
+      "longitude": "78.4483"
     },
-    {
-      "complaintId":2,
-      "type": "Coffee machine",
-      "description": "Machine Cleaning",
-      "reportedBy": "person3",
-      "locationAddress": "Hitech city, Hyderabad, india.",
-      "reportedTime": 1537019224654,
-      "complaintStatus": "Open",
-      "lat": 17.448657,
-      "lng": 78.363197
+    "imagePath": null,
+    "address": "DilsukNagar",
+    "customerHistory": null
+  }, {
+    "issueID": 3,
+    "description": "Cable got disconnected",
+    "customerName": "kumar",
+    "customerMobile": "7123567890",
+    "complaintDate": "2019-02-03 21:12:22",
+    "severity": "Minor",
+    "customerLocation": {
+      "latitude": "17.4375",
+      "longitude": "78.4483"
     },
-    {
-      "complaintId":3,
-      "type": "Bank Verification",
-      "description": "Personal Loan",
-      "reportedBy": "person2",
-      "locationAddress": "Hafeezpet, Hyderabad,India.",
-      "reportedTime": 1527019224654,
-      "complaintStatus": "Open",
-      "lat": 17.448657,
-      "lng": 78.363197
-    }
-  ]
+    "issueStatus": "COMPLETED",
+    "issueCategoryType": "Repair",
+    "employeelocation": {
+      "latitude": "17.4375",
+      "longitude": "78.4483"
+    },
+    "imagePath": null,
+    "address": "Ameerpet",
+    "customerHistory": []
+  }, {
+    "issueID": 1,
+    "description": "My Adaptor is not working well",
+    "customerName": "uday",
+    "customerMobile": "7123456789",
+    "complaintDate": "2019-02-03 19:50:28",
+    "severity": "Minor",
+    "customerLocation": {
+      "latitude": "17.4490088",
+      "longitude": "78.38563247"
+    },
+    "issueStatus": "ASSIGNED",
+    "issueCategoryType": "Service",
+    "employeelocation": {
+      "latitude": "17.4490088",
+      "longitude": "78.38563247"
+    },
+    "imagePath": "records/1/1549468416800images.jpg",
+    "address": "lb nagar, hyderabad",
+    "customerHistory": [{
+      "issueID": 1,
+      "description": "My Adaptor is not working well",
+      "closedDate": "2019-02-06 22:55:48",
+      "feedback": "Issue is resolved.Thanks for the quick support."
+    }]
+  }]
 }

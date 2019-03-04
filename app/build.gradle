@@ -163,6 +163,7 @@ dependencies {
     implementation 'io.paperdb:paperdb:2.6'
     implementation 'com.isseiaoki:simplecropview:1.1.6'
     implementation 'com.github.jkwiecien:EasyImage:2.0.3'
+    implementation 'com.oguzdev:CircularFloatingActionMenu:1.0.2'
     implementation project(':biometric-auth')
 
     annotationProcessor "android.arch.persistence.room:compiler:$rootProject.roomVersion"

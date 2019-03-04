@@ -45,6 +45,7 @@ public class BindingAdapters {
     @BindingAdapter("layout_job_status")
     public static void configureIssueDetails(View view, String status) {
         int id = view.getId();
+        view.setVisibility(View.GONE);
         switch (IssueStatus.getIssueStatus(status)) {
             case NEW:
             case ACCEPTED:
@@ -65,7 +66,11 @@ public class BindingAdapters {
                 }
                 break;
             case COMPLETED:
-                view.setVisibility(View.GONE);
+                if (R.id.rl_completed == id) {
+                    view.setVisibility(View.VISIBLE);
+                } else {
+                    view.setVisibility(View.GONE);
+                }
                 break;
         }
     }

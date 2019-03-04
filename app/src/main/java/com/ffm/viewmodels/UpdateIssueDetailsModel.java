@@ -22,7 +22,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class UpdateIssueDetailsModel extends BaseAndroidViewModel<Integer, JSONObject, ComplaintStatus, UpdateIssueDetailsModel> {
+public class UpdateIssueDetailsModel extends BaseAndroidViewModel<Integer, Void, ComplaintStatus, UpdateIssueDetailsModel> {
     public UpdateIssueDetailsModel(int errorCode) {
         super(false, errorCode);
     }
@@ -43,10 +43,10 @@ public class UpdateIssueDetailsModel extends BaseAndroidViewModel<Integer, JSONO
         RequestBody longitude = RequestBody.create(text, String.valueOf(complaintStatus.getLocationInfo().getLongitude()));
         //RequestBody file = RequestBody.create(MediaType.parse("image/*"), new File(complaintStatus.getImagePath()));
         restCall = new RestCall<>(context, true);
-        restCall.execute(restServices.updateIssueDetails(issueID, employeeID, issueStatus, latitude, longitude, file), 2, new NetworkListener<JSONObject>() {
+        restCall.execute(restServices.updateIssueDetails(issueID, employeeID, issueStatus, latitude, longitude, file), 2, new NetworkListener<Void>() {
             @Override
-            public void success(JSONObject response) {
-                Trace.i("Response:" + response);
+            public void success(Void response) {
+                //Trace.i("Response:" + response);
                 data.postValue(0);
             }
 

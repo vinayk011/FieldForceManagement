@@ -68,6 +68,7 @@ public class Complaint implements Comparable, Serializable {
     private boolean changed;
 
 
+
     @Override
     public int compareTo(Object o) {
         Complaint compare = (Complaint) o;

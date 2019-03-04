@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.ffm.R;
 import com.ffm.adapters.ComplaintsAdapter;
@@ -21,8 +22,15 @@ import com.ffm.preference.AppPreference;
 import com.ffm.util.GsonUtil;
 import com.ffm.util.Trace;
 import com.ffm.viewmodels.GetComplaintsModel;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -62,8 +70,41 @@ public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
 
     private void init() {
         setRecyclerView();
+        //setFabMenu();
         AppPreference.getInstance().putString(AppPrefConstants.USER_PHONE, "8008526853");
         AppPreference.getInstance().putString(AppPrefConstants.USER_ID, "EMP101");
+    }
+
+    private void setFabMenu() {
+        // Create an icon
+        ImageView icon = new ImageView(context);
+        icon.setImageResource(R.mipmap.ic_launcher);
+
+        FloatingActionButton actionButton = new FloatingActionButton.Builder(activity)
+                .setContentView(icon)
+                .build();
+        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(activity);
+        // repeat many times:
+        ImageView itemIcon1 = new ImageView(activity);
+        itemIcon1.setImageResource(R.mipmap.ic_launcher);
+
+        ImageView itemIcon2 = new ImageView(activity);
+        itemIcon2.setImageResource(R.mipmap.ic_launcher);
+
+        ImageView itemIcon3 = new ImageView(activity);
+        itemIcon3.setImageResource(R.mipmap.ic_launcher);
+
+        SubActionButton button1 = itemBuilder.setContentView(itemIcon1).build();
+        SubActionButton button2 = itemBuilder.setContentView(itemIcon2).build();
+        SubActionButton button3 = itemBuilder.setContentView(itemIcon3).build();
+
+        //attach the sub buttons to the main button
+        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(activity)
+                .addSubActionView(button1)
+                .addSubActionView(button2)
+                .addSubActionView(button3)
+                .attachTo(actionButton)
+                .build();
     }
 
     private void setRecyclerView() {
@@ -91,6 +132,12 @@ public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
         attachObservers();
         listenData();
         updateReportsFromServer();
+
+//        Type type = new TypeToken<List<Complaint>>() {
+//        }.getType();
+//        String json = GsonUtil.readReportsJSONFile(context);
+//        ArrayList<Complaint> complaints = new Gson().fromJson(json, type);
+//        DataHandler.getInstance().addComplaintsToDb(complaints);
     }
 
     private void attachObservers() {
