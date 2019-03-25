@@ -58,14 +58,14 @@ public class BindingAdapters {
                 }
                 break;
             case STARTED:
-            case PAUSED:
+            case COMPLETED:
                 if (R.id.rl_customer_call_response == id) {
                     view.setVisibility(View.GONE);
                 } else {
                     view.setVisibility(View.VISIBLE);
                 }
                 break;
-            case COMPLETED:
+            case PAUSED:
                 if (R.id.rl_completed == id) {
                     view.setVisibility(View.VISIBLE);
                 } else {

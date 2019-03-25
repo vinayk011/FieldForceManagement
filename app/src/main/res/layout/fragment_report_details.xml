@@ -118,7 +118,7 @@
                     android:gravity="center_vertical"
                     android:text="@{complaint.complaintDate}"
                     android:textColor="@color/colorPrimaryText"
-                    android:textSize="@dimen/_12ssp" />
+                    android:textSize="@dimen/_10ssp" />
                 <!--<TextView
                     android:id="@+id/report_type"
                     android:layout_width="wrap_content"
@@ -132,10 +132,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/job_date"
-                    android:layout_marginLeft="@dimen/_3sdp"
                     android:text="@{complaint.description}"
                     android:textColor="@color/colorPrimaryTextDark"
-                    android:textSize="@dimen/_10ssp" />
+                    android:textSize="@dimen/_12ssp" />
 
 
                 <TextView
@@ -147,7 +146,20 @@
                     android:layout_marginBottom="@dimen/_5sdp"
                     android:text="@{complaint.address}"
                     android:textColor="@color/colorPrimaryTextDark"
-                    android:textSize="@dimen/_10ssp" />
+                    android:textSize="@dimen/_12ssp" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:elevation="@dimen/_2sdp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/_5sdp">
 
                 <FrameLayout
                     android:id="@+id/frame_map"
@@ -169,6 +181,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/frame_map"
                     android:padding="10dp"
+                    android:visibility="gone"
                     app:layout_job_status="@{complaint.issueStatus}">
 
                     <TextView
@@ -218,6 +231,19 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/spinner"
+                        android:layout_width="@dimen/_150sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/cb_location_reached"
+                        android:backgroundTint="@color/light_gray_30"
+                        android:gravity="center"
+                        android:minWidth="@dimen/_150sdp"
+                        android:minHeight="@dimen/_30sdp"
+                        android:padding="5dp"
+                        android:popupBackground="@drawable/custom_spin_bg"
+                        android:textSize="@dimen/_12sdp" />
+
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_75sdp"
@@ -259,21 +285,23 @@
                     </FrameLayout>
                 </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/rl_completed"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/frame_map"
-                android:padding="3dp"
-                app:layout_job_status="@{complaint.issueStatus}">
-                <TextView
-                    android:id="@+id/tv_job_status"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:id="@+id/rl_completed"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/job_completed"
-                    android:visibility="gone"/>
+                    android:layout_below="@+id/frame_map"
+                    android:padding="3dp"
+                    app:layout_job_status="@{complaint.issueStatus}">
 
-            </RelativeLayout>
+                    <TextView
+                        android:id="@+id/tv_job_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/job_completed"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

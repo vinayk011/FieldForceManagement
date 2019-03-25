@@ -11,11 +11,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CompoundButton;
 
 import com.ffm.FieldForceApplication;
 import com.ffm.R;
 import com.ffm.activity.HomeActivity;
+import com.ffm.adapters.SpinnerAdapter;
 import com.ffm.databinding.FragmentReportDetailsBinding;
 import com.ffm.db.paper.PaperConstants;
 import com.ffm.db.paper.PaperDB;
@@ -74,7 +76,7 @@ import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
 
-public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBinding> implements OnMapReadyCallback {
+public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBinding> implements OnMapReadyCallback, AdapterView.OnItemSelectedListener {
 
 
     private AskForPermissionDialog askForPermissionDialog;
@@ -87,6 +89,8 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
     private FusedLocationProviderClient mFusedLocationClient;
     private ComplaintModel complaintModel;
     private Complaint complaint;
+    private ArrayList<String> issueMenu = new ArrayList<>();
+    private SpinnerAdapter spinnerAdapter;
 
 
     @Nullable
@@ -172,7 +176,21 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
                 updateServer();
             }
         });
+        setUpSpinner();
         requestCall();
+    }
+
+    private void setUpSpinner() {
+        spinnerAdapter = new SpinnerAdapter(context, issueMenu);
+        binding.spinner.setAdapter(spinnerAdapter);
+        updateIssueMenu();
+    }
+
+    private void updateIssueMenu() {
+        issueMenu.clear();
+        issueMenu.add("Customer Not available");
+        issueMenu.add("Issue resolved");
+        spinnerAdapter.setItems(issueMenu);
     }
 
     private void updateServer() {
@@ -453,6 +471,16 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
                 }
             }
         });
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Trace.i("itemselected:" + issueMenu.get(position));
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
 }
