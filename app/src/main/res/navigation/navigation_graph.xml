@@ -54,4 +54,10 @@
         android:label="Track Customer Location"
         tools:layout="@layout/fragmet_map1">
     </fragment>
+    <fragment
+        android:id="@+id/test_fragment"
+        android:name="com.ffm.fragment.TestFragment"
+        android:label="Test Fragment"
+        tools:layout="@layout/fragmet_test">
+    </fragment>
 </navigation>

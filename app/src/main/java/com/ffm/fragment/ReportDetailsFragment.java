@@ -45,6 +45,8 @@ import com.ffm.util.Trace;
 import com.ffm.viewmodels.GetCustomerLocationImageModel;
 import com.ffm.viewmodels.UpdateIssueDetailsModel;
 import com.ffm.viewmodels.request.ComplaintStatus;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -76,7 +78,8 @@ import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
 
-public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBinding> implements OnMapReadyCallback, AdapterView.OnItemSelectedListener {
+public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBinding> implements OnMapReadyCallback, AdapterView.OnItemSelectedListener, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
 
     private AskForPermissionDialog askForPermissionDialog;
@@ -91,6 +94,7 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
     private Complaint complaint;
     private ArrayList<String> issueMenu = new ArrayList<>();
     private SpinnerAdapter spinnerAdapter;
+    private GoogleApiClient mGoogleApiClient;
 
 
     @Nullable
@@ -110,6 +114,11 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
         binding.mapView.getMapAsync(this);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
         init();
+        mGoogleApiClient = new GoogleApiClient.Builder(context)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
         return binding.getRoot();
     }
 
@@ -265,6 +274,22 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
         }
     }
 
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Trace.i("Location services connected.");
+        startApiClient();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Trace.i("Location services suspended. Please reconnect.");
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
     public void resume() {
         if (getUserVisibleHint()) {
             hideKeyboard(context);
@@ -272,6 +297,7 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
                 binding.setImage(PaperDB.getInstance().getImageBitmap());
             }
             binding.mapView.onResume();
+            mGoogleApiClient.connect();
             attachObservers();
         }
     }
@@ -282,6 +308,9 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
             askForPermissionDialog.dismiss();
         }
         binding.mapView.onPause();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
        /* if (uiWarningDialog != null && uiWarningDialog.isShowing()) {
             uiWarningDialog.dismiss();
         }*/
@@ -387,9 +416,10 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
                 if (granted) {
                     //Todo
                     //startScan(ScanConstants.OPEN_CAMERA);
+                   // startApiClient();
                     if (forCamera) {
                         EasyImage.openCamera(ReportDetailsFragment.this, CAMERA_REQUEST);
-                        startApiClient();
+
                     }
                 } else {
                     if (askForPermissionDialog != null && askForPermissionDialog.isShowing()) {
@@ -426,12 +456,10 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
     @SuppressLint("MissingPermission")
     private void updateLastLocation() {
         mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(activity, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if (location != null) {
-                            lastLocation = location;
-                        }
+                .addOnSuccessListener(activity, location -> {
+                    if (location != null) {
+                        lastLocation = location;
+                        Trace.i("Last location:" + lastLocation.getLongitude() + ", " + lastLocation.getLatitude());
                     }
                 });
     }
