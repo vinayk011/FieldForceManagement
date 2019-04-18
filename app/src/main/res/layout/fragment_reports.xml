@@ -8,7 +8,7 @@
 
         <variable
             name="hasReports"
-            type="Boolean" />
+            type="boolean" />
 
     </data>
 

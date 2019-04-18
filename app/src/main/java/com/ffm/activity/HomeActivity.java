@@ -91,7 +91,7 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> implements B
             Trace.i("");
             // graph.setStartDestination(R.id.signin_fragment);
         } else {
-            graph.setStartDestination(R.id.reports_fragment);
+            graph.setStartDestination(R.id.dashboard_reports_fragment);
         }
         navHostFragment.getNavController().setGraph(graph);
         navHostFragment.getNavController().getGraph().setDefaultArguments(getIntent().getExtras());
@@ -145,7 +145,7 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> implements B
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (R.id.reports_fragment == getNavController().getCurrentDestination().getId()) {
+                if (R.id.dashboard_reports_fragment == getNavController().getCurrentDestination().getId()) {
                     drawerLayout.openDrawer(GravityCompat.START);
                 } else {
                     onBackPressed();

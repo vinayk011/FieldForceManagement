@@ -46,6 +46,14 @@ public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
     private ArrayList<Complaint> complaints = new ArrayList<>();
     private AskForPermissionDialog askForPermissionDialog;
 
+    public static ReportsFragment newInstance(boolean isSystemApp) {
+        Bundle args = new Bundle();
+        args.putBoolean("isSystemApp", isSystemApp);
+        ReportsFragment fragment = new ReportsFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
