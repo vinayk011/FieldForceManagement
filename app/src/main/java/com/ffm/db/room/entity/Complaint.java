@@ -214,4 +214,26 @@ public class Complaint implements Comparable, Serializable {
     public void setChanged(boolean changed) {
         this.changed = changed;
     }
+
+    @Override
+    public String toString() {
+        return "Complaint{" +
+                "issueID=" + issueID +
+                ", employeeID='" + employeeID + '\'' +
+                ", issueType='" + issueType + '\'' +
+                ", description='" + description + '\'' +
+                ", imagePath='" + imagePath + '\'' +
+                ", customerName='" + customerName + '\'' +
+                ", customerMobile='" + customerMobile + '\'' +
+                ", complaintDate='" + complaintDate + '\'' +
+                ", severity='" + severity + '\'' +
+                ", customerLocation=" + customerLocation +
+                ", employeeLocation=" + employeeLocation +
+                ", issueStatus='" + issueStatus + '\'' +
+                ", address='" + address + '\'' +
+                ", reachedLocation=" + reachedLocation +
+                ", customerHistory=" + customerHistory +
+                ", changed=" + changed +
+                '}';
+    }
 }

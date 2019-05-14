@@ -291,7 +291,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/frame_map"
                     android:padding="3dp"
-                    app:layout_job_status="@{complaint.issueStatus}">
+                    app:layout_job_status_cl="@{complaint.issueStatus}">
 
                     <TextView
                         android:id="@+id/tv_job_status"

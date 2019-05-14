@@ -4,6 +4,7 @@ package com.ffm.adapters;
 import com.ffm.fragment.AssignedReportsFragment;
 import com.ffm.fragment.InprogressReportsFragment;
 import com.ffm.fragment.ReportsFragment;
+import com.ffm.util.IssueStatus;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -11,7 +12,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
-    private CharSequence titles[] = {"Assigned", "In Progress", "Completed"};
+    private String titles[] = {IssueStatus.ASSIGNED.getValue(), IssueStatus.IN_PROGRESS.getValue(), IssueStatus.COMPLETED.getValue()};
 
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -19,12 +20,10 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        if (position == 0) {
-            return ReportsFragment.newInstance(false);
-        } else if (position == 1) {
-            return InprogressReportsFragment.newInstance(false);
+        if (position == 1) {
+            return ReportsFragment.newInstance(IssueStatus.STARTED.getValue());
         } else {
-            return InprogressReportsFragment.newInstance(false);
+            return ReportsFragment.newInstance(titles[position]);
         }
     }
 

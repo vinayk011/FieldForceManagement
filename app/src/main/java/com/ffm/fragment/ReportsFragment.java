@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.ffm.R;
 import com.ffm.adapters.ComplaintsAdapter;
+import com.ffm.constants.IntentConstants;
 import com.ffm.databinding.FragmentReportsBinding;
 import com.ffm.db.room.entity.Complaint;
 import com.ffm.db.room.handlers.DataHandler;
@@ -20,6 +21,7 @@ import com.ffm.permission.PermissionCallback;
 import com.ffm.preference.AppPrefConstants;
 import com.ffm.preference.AppPreference;
 import com.ffm.util.GsonUtil;
+import com.ffm.util.IssueStatus;
 import com.ffm.util.Trace;
 import com.ffm.viewmodels.GetComplaintsModel;
 import com.google.gson.Gson;
@@ -45,10 +47,12 @@ public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
     private ComplaintsAdapter complaintsAdapter;
     private ArrayList<Complaint> complaints = new ArrayList<>();
     private AskForPermissionDialog askForPermissionDialog;
+    private String issueStatus = IssueStatus.ASSIGNED.name();
 
-    public static ReportsFragment newInstance(boolean isSystemApp) {
+    public static ReportsFragment newInstance(String issueStatus) {
+        Trace.i("");
         Bundle args = new Bundle();
-        args.putBoolean("isSystemApp", isSystemApp);
+        args.putString(IntentConstants.ISSUE_STATUS, issueStatus);
         ReportsFragment fragment = new ReportsFragment();
         fragment.setArguments(args);
         return fragment;
@@ -57,6 +61,7 @@ public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Trace.i("");
         binding = (FragmentReportsBinding) DataBindingUtil.inflate(inflater, R.layout.fragment_reports, container, false);
         observeClick(binding.getRoot());
         init();
@@ -70,6 +75,9 @@ public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
         complaintsViewModel.getComplaints().observe(this, complaintsList -> {
             //Todo
             complaints = (ArrayList<Complaint>) complaintsList;
+            for (Complaint complaint : complaints) {
+                Trace.i("Complaint: " + complaint.toString());
+            }
             binding.setHasReports(complaints != null && !complaints.isEmpty());
             //Collections.sort(complaints, (d1, d2) -> d1.getType().compareTo(d2.getType()));
             if (complaintsAdapter != null) complaintsAdapter.setReports(complaints, false);
@@ -79,6 +87,8 @@ public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
     private void init() {
         setRecyclerView();
         //setFabMenu();
+        if (getArguments() != null)
+            issueStatus = getArguments().getString(IntentConstants.ISSUE_STATUS);
         AppPreference.getInstance().putString(AppPrefConstants.USER_PHONE, "8008526853");
         AppPreference.getInstance().putString(AppPrefConstants.USER_ID, "EMP101");
     }
@@ -137,6 +147,7 @@ public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
     }
 
     public void resume() {
+        Trace.i("");
         attachObservers();
         listenData();
         updateReportsFromServer();
@@ -150,7 +161,7 @@ public class ReportsFragment extends BaseFragment<FragmentReportsBinding> {
 
     private void attachObservers() {
         if (complaintsViewModel != null) {
-            complaintsViewModel.run(this);
+            complaintsViewModel.run(this, issueStatus);
         }
     }
 

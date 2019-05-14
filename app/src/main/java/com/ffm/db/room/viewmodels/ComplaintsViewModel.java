@@ -31,10 +31,10 @@ public class ComplaintsViewModel extends AndroidViewModel {
         return complaints;
     }
 
-    public void run(LifecycleOwner lifecycleOwner) {
+    public void run(LifecycleOwner lifecycleOwner, String issueStatus) {
         clear(lifecycleOwner);
         if (AppPreference.getInstance().getString(AppPrefConstants.USER_ID) != null) {
-            complaintsLiveData = appDatabase.complaintsDao().getComplaintsByEmpIDAsLive(AppPreference.getInstance().getString(AppPrefConstants.USER_ID));
+            complaintsLiveData = appDatabase.complaintsDao().getComplaintsByEmpIDAndStatusAsLive(AppPreference.getInstance().getString(AppPrefConstants.USER_ID), issueStatus);
             complaintsLiveData.observe(lifecycleOwner, complaintsObserver);
         }
 

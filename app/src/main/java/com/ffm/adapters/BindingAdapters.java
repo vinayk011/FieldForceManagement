@@ -75,6 +75,22 @@ public class BindingAdapters {
         }
     }
 
+    @BindingAdapter("layout_job_status_cl")
+    public static void configureCLIssueDetails(View view, String status) {
+        int id = view.getId();
+        view.setVisibility(View.GONE);
+        switch (IssueStatus.getIssueStatus(status)) {
+            case COMPLETED:
+                if (R.id.rl_completed == id) {
+                    view.setVisibility(View.VISIBLE);
+                } else {
+                    view.setVisibility(View.GONE);
+                }
+                break;
+        }
+    }
+
+
     @BindingAdapter("image_big")
     public static void setImageBig(ImageView imageView, Bitmap bitmap) {
         if (bitmap == null) {

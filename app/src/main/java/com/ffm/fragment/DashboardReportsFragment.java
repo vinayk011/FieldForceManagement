@@ -32,13 +32,19 @@ public class DashboardReportsFragment extends BaseFragment<FragmentDashboardRepo
     }
 
     private void init(){
+        Trace.i("");
         // Get the ViewPager and set it's PagerAdapter so that it can display items
-        binding.viewPager.setAdapter(new ViewPagerAdapter(getFragmentManager()));
+        binding.viewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager()));
         binding.tabLayout.setupWithViewPager(binding.viewPager);
         //binding.viewPager.setCurrentItem(0, false);
     }
 
     private void listenData(){
 
+    }
+
+
+    public void resume() {
+        Trace.i("");
     }
 }
