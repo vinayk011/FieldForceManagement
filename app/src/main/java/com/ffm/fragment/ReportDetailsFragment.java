@@ -43,6 +43,7 @@ import com.ffm.util.GsonUtil;
 import com.ffm.util.IssueStatus;
 import com.ffm.util.Trace;
 import com.ffm.viewmodels.GetCustomerLocationImageModel;
+import com.ffm.viewmodels.GetIssueHistory;
 import com.ffm.viewmodels.UpdateIssueDetailsModel;
 import com.ffm.viewmodels.request.ComplaintStatus;
 import com.google.android.gms.common.ConnectionResult;
@@ -136,8 +137,24 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
             this.complaint = complaint;
             binding.setComplaint(this.complaint);
             Trace.i("Complaint:" + complaint.toString());
+            if (complaint.getIssueStatus().equals(IssueStatus.COMPLETED.getValue()))
+                getIssueHistory();
             getCustomerLocationImage();
             onMapReady(googleMap);
+        });
+    }
+
+    private void getIssueHistory() {
+        GetIssueHistory issueHistory = new GetIssueHistory(1);
+        issueHistory.run(context, complaintId).getData().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                if (integer == 1) {
+                    Trace.i("Failed");
+                } else {
+                    Trace.i("Success");
+                }
+            }
         });
     }
 
@@ -148,42 +165,33 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
             binding.setImage(null);
         });
         binding.setImage(PaperDB.getInstance().getImageBitmap());
-        binding.imgCall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (complaint != null) {
-                    String phoneNumber = "tel:" + complaint.getCustomerMobile();
-                    Intent intent = new Intent(Intent.ACTION_CALL);
-                    intent.setData(Uri.parse(phoneNumber));
-                    startActivity(intent);
-                }
+        binding.imgCall.setOnClickListener(view -> {
+            if (complaint != null) {
+                String phoneNumber = "tel:" + complaint.getCustomerMobile();
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse(phoneNumber));
+                startActivity(intent);
             }
         });
-        binding.updateStatus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateLastLocation();
-                MaterialButton button = (MaterialButton) v;
-                if (button.getText().equals(getString(R.string.start_job))) {
-                    //Todo start job and update job report along with location to server
-                    complaint.setIssueStatus(IssueStatus.STARTED.getValue());
-                } else if (button.getText().equals(getString(R.string.complete_job))) {
-                    complaint.setIssueStatus(IssueStatus.COMPLETED.getValue());
-                }
-                if (lastLocation != null) {
-                    complaint.setEmployeeLocation(new LocationInfo(lastLocation.getLatitude(), lastLocation.getLongitude()));
-                }
-                updateServer();
+        binding.updateStatus.setOnClickListener(v -> {
+            updateLastLocation();
+            MaterialButton button = (MaterialButton) v;
+            if (button.getText().equals(getString(R.string.start_job))) {
+                //Todo start job and update job report along with location to server
+                complaint.setIssueStatus(IssueStatus.STARTED.getValue());
+            } else if (button.getText().equals(getString(R.string.complete_job))) {
+                complaint.setIssueStatus(IssueStatus.COMPLETED.getValue());
             }
+            if (lastLocation != null) {
+                complaint.setEmployeeLocation(new LocationInfo(lastLocation.getLatitude(), lastLocation.getLongitude()));
+            }
+            updateServer();
         });
-        binding.cbLocationReached.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //Todo update location to server and update complaint object
-                //complaint.set(isChecked);
-                complaint.setReachedLocation(isChecked);
-                updateServer();
-            }
+        binding.cbLocationReached.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            //Todo update location to server and update complaint object
+            //complaint.set(isChecked);
+            complaint.setReachedLocation(isChecked);
+            updateServer();
         });
         setUpSpinner();
         requestCall();
@@ -416,7 +424,7 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
                 if (granted) {
                     //Todo
                     //startScan(ScanConstants.OPEN_CAMERA);
-                   // startApiClient();
+                    // startApiClient();
                     if (forCamera) {
                         EasyImage.openCamera(ReportDetailsFragment.this, CAMERA_REQUEST);
 

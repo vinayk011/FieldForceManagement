@@ -61,4 +61,6 @@
     <string name="please_check_your_internet_connection_and_retry"><![CDATA[<string name=\"please_check_your_internet_connection_and_retry\">Please check your internet connection and retry.</string>]]></string>
     <string name="retry">Retry</string>
     <string name="job_completed">Job Completed.</string>
+    <string name="issue_info">Issue Info</string>
+    <string name="customer_location">Customer Location:</string>
 </resources>

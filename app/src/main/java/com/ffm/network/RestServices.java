@@ -2,6 +2,7 @@ package com.ffm.network;
 
 import com.ffm.viewmodels.request.ComplaintStatus;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
@@ -45,6 +46,9 @@ public interface RestServices {
 
     @GET("{path}")
     Call<ResponseBody> getImage(@Path(value = "path", encoded = true) String path);
+
+    @GET("resources/fieldforce/GetIssueHistory")
+    Call<JsonArray> getIssueHistory(@Query("issueID") int issueID);
 //
 //    @GET("/cattle/device")
 //    Call<JsonArray> getUnmappedDevices();
