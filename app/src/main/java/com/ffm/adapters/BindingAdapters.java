@@ -7,14 +7,21 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.text.SpannableString;
+import android.text.TextUtils;
+import android.text.style.AbsoluteSizeSpan;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ffm.R;
+import com.ffm.util.DateUtil;
 import com.ffm.util.IssueStatus;
 import com.google.android.material.button.MaterialButton;
 
 import androidx.databinding.BindingAdapter;
+
+import static android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE;
 
 public class BindingAdapters {
     @BindingAdapter("isGone")
@@ -90,6 +97,22 @@ public class BindingAdapters {
         }
     }
 
+
+    @BindingAdapter("status")
+    public static void setStatus(TextView textView, String status) {
+        String text = textView.getResources().getString(R.string.job) + " " + status.toLowerCase();
+        SpannableString span1 = new SpannableString(text);
+        span1.setSpan(new AbsoluteSizeSpan((int) textView.getContext().getResources().getDimension(R.dimen._10sdp))
+                , 0, text.length(), SPAN_INCLUSIVE_INCLUSIVE);
+
+//        SpannableString span2 = new SpannableString(updatedTime);
+//        span2.setSpan(new AbsoluteSizeSpan((int) textView.getContext().getResources().getDimension(R.dimen._10sdp))
+//                , 0, updatedTime.length(), SPAN_INCLUSIVE_INCLUSIVE);
+
+        CharSequence finalText = TextUtils.concat(span1, " - ");
+        textView.setText(finalText);
+
+    }
 
     @BindingAdapter("image_big")
     public static void setImageBig(ImageView imageView, Bitmap bitmap) {

@@ -7,7 +7,6 @@ public class IssueHistory {
     private Integer issueID;
     private String updatedDate;
     private String status;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     public Integer getIssueID() {
         return issueID;
@@ -33,11 +32,12 @@ public class IssueHistory {
         this.status = status;
     }
 
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
+    @Override
+    public String toString() {
+        return "IssueHistory{" +
+                "issueID=" + issueID +
+                ", updatedDate='" + updatedDate + '\'' +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

@@ -17,6 +17,7 @@ import android.widget.CompoundButton;
 import com.ffm.FieldForceApplication;
 import com.ffm.R;
 import com.ffm.activity.HomeActivity;
+import com.ffm.adapters.CompletedIssueAdapter;
 import com.ffm.adapters.SpinnerAdapter;
 import com.ffm.databinding.FragmentReportDetailsBinding;
 import com.ffm.db.paper.PaperConstants;
@@ -32,6 +33,7 @@ import com.ffm.dialog.ImageSelectDialog;
 import com.ffm.listener.CustomerResponseListener;
 import com.ffm.listener.ImageSelectListener;
 import com.ffm.listener.UpdateJobListener;
+import com.ffm.model.IssueHistory;
 import com.ffm.permission.AskForPermissionDialog;
 import com.ffm.permission.AskForPermissionListener;
 import com.ffm.permission.Permission;
@@ -75,6 +77,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.RecyclerView;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
@@ -96,6 +99,9 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
     private ArrayList<String> issueMenu = new ArrayList<>();
     private SpinnerAdapter spinnerAdapter;
     private GoogleApiClient mGoogleApiClient;
+    private RecyclerView completedIssueRecyclerVIew;
+    private ArrayList<IssueHistory> issueHistories = new ArrayList<>();
+    private CompletedIssueAdapter completedIssueAdapter;
 
 
     @Nullable
@@ -153,9 +159,16 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
                     Trace.i("Failed");
                 } else {
                     Trace.i("Success");
+                    updateCompletedIssueDetails();
                 }
             }
         });
+    }
+
+    private void updateCompletedIssueDetails() {
+        issueHistories = PaperDB.getInstance().get().read(PaperConstants.COMPLETED_ISSUE_DETAILS);
+        completedIssueAdapter.setHistoryList(issueHistories);
+        completedIssueAdapter.notifyDataSetChanged();
     }
 
     private void init() {
@@ -193,6 +206,9 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
             complaint.setReachedLocation(isChecked);
             updateServer();
         });
+        completedIssueAdapter = new CompletedIssueAdapter(context, issueHistories);
+        binding.recyclerView.setHasFixedSize(true);
+        binding.recyclerView.setAdapter(completedIssueAdapter);
         setUpSpinner();
         requestCall();
     }

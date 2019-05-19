@@ -76,7 +76,7 @@ public class DateUtil {
     }
 
     public static Date convertDateFormat(String date) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
         try {
             return simpleDateFormat.parse(date);
         } catch (ParseException e) {
@@ -500,6 +500,13 @@ public class DateUtil {
         calendar.setTimeInMillis(time);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         return simpleDateFormat.format(calendar.getTime());
+    }
+
+    public static long convertStringToTimeInMills(String date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(convertDateFormat(date));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        return calendar.getTimeInMillis();
     }
 
     public static String convertForGraphLabel(int min) {

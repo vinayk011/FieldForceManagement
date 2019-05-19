@@ -117,9 +117,10 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:text="@string/issue_info"
-                    android:textStyle="bold"
                     android:textColor="@color/colorPrimaryText"
-                    android:textSize="@dimen/_13ssp" />
+                    android:textSize="@dimen/_13ssp"
+                    android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/job_date"
                     android:layout_width="match_parent"
@@ -170,15 +171,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="@dimen/_5sdp">
+
                 <TextView
                     android:id="@+id/location_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:text="@string/customer_location"
-                    android:textStyle="bold"
                     android:textColor="@color/colorPrimaryText"
-                    android:textSize="@dimen/_13ssp" />
+                    android:textSize="@dimen/_13ssp"
+                    android:textStyle="bold" />
 
                 <FrameLayout
                     android:id="@+id/frame_map"
@@ -317,6 +319,22 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/job_completed" />
+
+                    <TextView
+                        android:id="@+id/tv_cl_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_job_status"
+                        android:text="@string/track_info" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view"
+                        android:padding="@dimen/_5sdp"
+                        android:layout_below="@+id/tv_cl_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/list_item_track_details" />
 
                 </RelativeLayout>
 

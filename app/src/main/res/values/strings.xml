@@ -62,5 +62,7 @@
     <string name="retry">Retry</string>
     <string name="job_completed">Job Completed.</string>
     <string name="issue_info">Issue Info</string>
+    <string name="job">Job</string>
     <string name="customer_location">Customer Location:</string>
+    <string name="track_info">Track Issue Details:</string>
 </resources>
