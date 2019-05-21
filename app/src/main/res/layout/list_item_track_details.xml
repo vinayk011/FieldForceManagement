@@ -17,6 +17,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:status="@{issueDetails.status}"/>
+            app:status="@{issueDetails.status}"
+            app:updated_time="@{issueDetails.updatedDate}"/>
     </LinearLayout>
 </layout>

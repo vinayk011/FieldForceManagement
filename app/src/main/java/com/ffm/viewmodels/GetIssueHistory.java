@@ -48,11 +48,14 @@ public class GetIssueHistory extends BaseAndroidViewModel<Integer, JsonArray, In
                                 issuesMap.put(DateUtil.convertStringToTimeInMills(issueHistory.getUpdatedDate()), issueHistory);
                             }
                         }
-                        PaperDB.getInstance().write(PaperConstants.COMPLETED_ISSUE_DETAILS, issuesMap.entrySet());
+
                         Trace.i("IssueHistory from server: " + issuesMap.size());
+                        issueHistories.clear();
                         for (long key : issuesMap.keySet()) {
                             Trace.i("i1: " + issuesMap.get(key).toString());
+                            issueHistories.add(issuesMap.get(key));
                         }
+                        PaperDB.getInstance().write(PaperConstants.COMPLETED_ISSUE_DETAILS, issueHistories);
                         data.postValue(0);
                     } catch (Exception e) {
                         e.printStackTrace();

@@ -318,7 +318,9 @@
                         android:id="@+id/tv_job_status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/job_completed" />
+                        android:text="@string/job_completed"
+                        android:textSize="@dimen/_13ssp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tv_cl_info"

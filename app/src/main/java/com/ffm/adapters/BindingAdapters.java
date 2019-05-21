@@ -98,18 +98,18 @@ public class BindingAdapters {
     }
 
 
-    @BindingAdapter("status")
-    public static void setStatus(TextView textView, String status) {
+    @BindingAdapter({"status", "updated_time"})
+    public static void setStatus(TextView textView, String status, String updatedTime) {
         String text = textView.getResources().getString(R.string.job) + " " + status.toLowerCase();
         SpannableString span1 = new SpannableString(text);
         span1.setSpan(new AbsoluteSizeSpan((int) textView.getContext().getResources().getDimension(R.dimen._10sdp))
                 , 0, text.length(), SPAN_INCLUSIVE_INCLUSIVE);
 
-//        SpannableString span2 = new SpannableString(updatedTime);
-//        span2.setSpan(new AbsoluteSizeSpan((int) textView.getContext().getResources().getDimension(R.dimen._10sdp))
-//                , 0, updatedTime.length(), SPAN_INCLUSIVE_INCLUSIVE);
+        SpannableString span2 = new SpannableString(updatedTime);
+        span2.setSpan(new AbsoluteSizeSpan((int) textView.getContext().getResources().getDimension(R.dimen._10sdp))
+                , 0, updatedTime.length(), SPAN_INCLUSIVE_INCLUSIVE);
 
-        CharSequence finalText = TextUtils.concat(span1, " - ");
+        CharSequence finalText = TextUtils.concat(span1, " - ", span2);
         textView.setText(finalText);
 
     }
