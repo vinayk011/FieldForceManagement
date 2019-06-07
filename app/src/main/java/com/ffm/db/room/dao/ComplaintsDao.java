@@ -34,6 +34,10 @@ public interface ComplaintsDao {
     @Query("SELECT * FROM Complaint WHERE employeeID =:employeeId AND issueStatus =:issueStatus")
     LiveData<List<Complaint>> getComplaintsByEmpIDAndStatusAsLive(String employeeId, String issueStatus);
 
+    @Query("SELECT * FROM Complaint WHERE employeeID =:employeeId AND issueStatus =:issueStatus OR issueStatus =:issueStatue2")
+    LiveData<List<Complaint>> getComplaintsByEmpIDAndMultipleStatusAsLive(String employeeId, String issueStatus, String issueStatue2);
+
+
     @Query("SELECT * FROM Complaint WHERE issueID =:issueId AND employeeID =:employeeId Limit 1")
     Complaint getComplaintsByIssueIDAndEmpId(int issueId, String employeeId);
 

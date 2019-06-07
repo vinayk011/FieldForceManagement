@@ -74,10 +74,12 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
+
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
@@ -102,6 +104,7 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
     private RecyclerView completedIssueRecyclerVIew;
     private ArrayList<IssueHistory> issueHistories = new ArrayList<>();
     private CompletedIssueAdapter completedIssueAdapter;
+    private boolean jobPaused = false;
 
 
     @Nullable
@@ -192,6 +195,9 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
             if (button.getText().equals(getString(R.string.start_job))) {
                 //Todo start job and update job report along with location to server
                 complaint.setIssueStatus(IssueStatus.STARTED.getValue());
+            } else if (button.getText().equals(getString(R.string.pause_job))) {
+                jobPaused = true;
+                complaint.setIssueStatus(IssueStatus.IN_PROGRESS.getValue());
             } else if (button.getText().equals(getString(R.string.complete_job))) {
                 complaint.setIssueStatus(IssueStatus.COMPLETED.getValue());
             }
@@ -223,7 +229,14 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
     private AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+            if (position < issueMenu.size()) {
+                if (issueMenu.get(position).equals(getString(R.string.customer_not_available))) {
+                    complaint.setIssueStatus(IssueStatus.PAUSED.getValue());
+                } else {
+                    complaint.setIssueStatus(IssueStatus.IN_PROGRESS.getValue());
+                }
+                binding.setComplaint(complaint);
+            }
         }
 
         @Override
@@ -234,8 +247,8 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
 
     private void updateIssueMenu() {
         issueMenu.clear();
-        issueMenu.add("Customer Not available");
         issueMenu.add("Issue resolved");
+        issueMenu.add("Customer Not available");
         spinnerAdapter.setItems(issueMenu);
     }
 
@@ -258,11 +271,18 @@ public class ReportDetailsFragment extends BaseFragment<FragmentReportDetailsBin
                 if (integer == 1) {
                     Trace.i("Failed");
                     FieldForceApplication.getInstance().showToast("Issue status update failed.");
+                    jobPaused = false;
                 } else {
                     Trace.i("Success");
+                    FieldForceApplication.getInstance().showToast("Issue successfully updated.");
                     AppPreference.getInstance().remove(AppPrefConstants.JOB_PIC_UPDATE);
-                    binding.setComplaint(complaint);
                     DataHandler.getInstance().updateComplaintToDb(complaint);
+                    if(jobPaused){
+                        Navigation.findNavController(getActivity(), R.id.home_nav_fragment).navigateUp();
+                        jobPaused = false;
+                    }else{
+                        binding.setComplaint(complaint);
+                    }
                 }
             }
         });

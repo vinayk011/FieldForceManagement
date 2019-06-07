@@ -40,8 +40,11 @@ public class BindingAdapters {
                 break;
             case STARTED:
             case RE_OPENED:
-            case PAUSED:
+            case IN_PROGRESS:
                 button.setText(R.string.complete_job);
+                break;
+            case PAUSED:
+                button.setText(R.string.pause_job);
                 break;
             case COMPLETED:
                 button.setVisibility(View.GONE);
@@ -65,13 +68,14 @@ public class BindingAdapters {
                 }
                 break;
             case STARTED:
+            case IN_PROGRESS:
+            case PAUSED:
                 if (R.id.rl_customer_call_response == id) {
                     view.setVisibility(View.GONE);
                 } else {
                     view.setVisibility(View.VISIBLE);
                 }
                 break;
-            case PAUSED:
             case COMPLETED:
                 if (R.id.rl_completed == id) {
                     view.setVisibility(View.VISIBLE);

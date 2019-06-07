@@ -331,10 +331,11 @@
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_view"
-                        android:padding="@dimen/_5sdp"
-                        android:layout_below="@+id/tv_cl_info"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_cl_info"
+                        android:layout_marginTop="-3dp"
+                        android:padding="@dimen/_5sdp"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         tools:listitem="@layout/list_item_track_details" />
 

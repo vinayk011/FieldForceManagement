@@ -6,6 +6,8 @@ import com.ffm.db.room.AppDatabase;
 import com.ffm.db.room.entity.Complaint;
 import com.ffm.preference.AppPrefConstants;
 import com.ffm.preference.AppPreference;
+import com.ffm.util.IssueStatus;
+import com.ffm.util.Trace;
 
 import java.util.List;
 
@@ -34,7 +36,12 @@ public class ComplaintsViewModel extends AndroidViewModel {
     public void run(LifecycleOwner lifecycleOwner, String issueStatus) {
         clear(lifecycleOwner);
         if (AppPreference.getInstance().getString(AppPrefConstants.USER_ID) != null) {
-            complaintsLiveData = appDatabase.complaintsDao().getComplaintsByEmpIDAndStatusAsLive(AppPreference.getInstance().getString(AppPrefConstants.USER_ID), issueStatus);
+            Trace.i("Issue Status: " + issueStatus);
+            if (issueStatus.equals(IssueStatus.STARTED.getValue())) {
+                complaintsLiveData = appDatabase.complaintsDao().getComplaintsByEmpIDAndMultipleStatusAsLive(AppPreference.getInstance().getString(AppPrefConstants.USER_ID), issueStatus, IssueStatus.PAUSED.getValue());
+            } else {
+                complaintsLiveData = appDatabase.complaintsDao().getComplaintsByEmpIDAndStatusAsLive(AppPreference.getInstance().getString(AppPrefConstants.USER_ID), issueStatus);
+            }
             complaintsLiveData.observe(lifecycleOwner, complaintsObserver);
         }
 
